@@ -9,7 +9,7 @@ Every skill follows one principle: **everything serves audience understanding.**
 | Skill | What it does | Status |
 |---|---|---|
 | [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | Sets up a project folder for one paper or topic and collects its media (PDF, figures, demo videos, chart data, screenshots) with source attribution: downloads automatically where possible (direct, released files, browser), asks the user only for what truly cannot be fetched, and keeps a manifest of every asset | v0.2.0 |
-| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva): defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects every callout to what it explains with an arrow, spells out every term on first use, and budgets time by key points and script length rather than page count | v0.1.0 |
+| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva): defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects every callout to what it explains with an arrow, spells out every term on first use, and budgets time by key points and script length rather than page count; ships a reference template deck and draws the template header / footer with one helper | v0.1.1 |
 
 More paper-sharing skills will be added over time.
 
@@ -52,7 +52,10 @@ skills/
   paper-discussion-slides/
     SKILL.md              # core rules (Claude reads this first)
     references/           # detailed examples, template spec example, PPTX techniques
-    scripts/slide_kit.py  # python-pptx helpers
+    assets/               # sample-template.pptx (reference deck) + preview
+    scripts/slide_kit.py  # python-pptx helpers, incl. chrome() for header / title / footer
+    scripts/build_sample_template.py  # rebuilds assets/sample-template.pptx
+    scripts/render_check.py           # page renders, thumbnail sheet, footer zoom strip
 ```
 
 ## Adding a skill

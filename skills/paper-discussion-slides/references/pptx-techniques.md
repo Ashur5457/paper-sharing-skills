@@ -25,17 +25,28 @@
 | `picture(slide, path, x, y, w, h)` | Fit an image into a box keeping its aspect ratio; returns the box it actually covers (for `sub`) |
 | `hbars(slide, x, y, rows, ...)` | Native horizontal bar chart; returns each bar's position (for arrows) |
 | `notes(slide, script)` | Write the speaker script |
+| `new_deck(template_path=None)` | Open a template PPTX, or create an empty 20 × 11.25 in deck |
+| `blank_slide(prs)` | Add a slide on the emptiest layout with its placeholders removed |
+| `chrome(slide, title, deck_title, credit, page, total)` | Template header bands, slide title and footer (values from `TEMPLATE`); build steps pass the same `page` |
+| `band_text(slide, x, y, w, h, text, size, color, align)` | One line of text vertically centred inside a band (used by `chrome`) |
+
+Other scripts:
+
+| Script | Purpose |
+|---|---|
+| `build_sample_template.py [out.pptx]` | Rebuild `assets/sample-template.pptx`, the reference deck for the template |
+| `render_check.py deck.pptx [out_dir]` | Render pages, a thumbnail sheet, and `footers.png` (every footer at full resolution) |
 
 Example:
 
 ```python
 import sys
 sys.path.insert(0, 'path/to/skills/paper-discussion-slides/scripts')
-from pptx import Presentation
 from slide_kit import *
 
-prs = Presentation('template.pptx')
-s = prs.slides.add_slide(prs.slide_layouts[6])
+prs = new_deck()                       # or new_deck('their-template.pptx')
+s = blank_slide(prs)
+chrome(s, 'The only loss', 'Short Deck Title', 'Author / Institution, 2026', page=9, total=17)
 _, r = picture(s, 'chart.png', 72, 222, 1150, 770)
 f = sub(r, (0.0, 0.37), (0.95, 0.43), pad=6)      # fractions measured on the original image
 frame(s, *f)

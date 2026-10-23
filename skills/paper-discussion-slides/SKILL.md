@@ -146,7 +146,8 @@ The goal is for the room to think together, not one person talking while everyon
 - **The template constrains only the header, footer, fonts and text colours.** Lay out everything else to fit the content.
 - Do not copy a layout from an example slide without asking why it looks that way. For instance, an example slide may use a grey monospace code box because it shows a language-model prompt; when the content is not a prompt, that style does not apply.
 - When the user provides a template, first measure its header, footer, title position, colours and fonts, then lay out the slides. When no template is provided, ask which one to use.
-- `references/template-example.md` shows how to write down a template specification (a Beamer Berlin + dolphin theme converted to PPTX).
+- `references/template-example.md` shows how to write down a template specification (a Beamer Berlin + dolphin theme converted to PPTX). `assets/sample-template.pptx` (preview: `assets/sample-template-preview.png`) is a finished reference deck in that template: cover, content slides with callout, arrows and frame, two build steps sharing a page number, and side-by-side blocks.
+- **Draw the header and footer with `chrome()` from `scripts/slide_kit.py`, never by hand.** Hand-drawn footers drift: a text box taller than its band, starting above it, or anchored to the top with default insets puts the footer text too high. `chrome()` makes every footer text box exactly the band, with zero insets, no autofit, and middle anchoring. For another template, measure it and change `TEMPLATE` in `slide_kit.py` once, rather than adjusting slides one by one.
 
 ---
 
@@ -160,7 +161,7 @@ The goal is for the room to think together, not one person talking while everyon
 
 ## 10. Building PPTX files
 
-When building with python-pptx, read `references/pptx-techniques.md` first and use the helpers in this skill's `scripts/slide_kit.py` (callouts that fit their text, curved and block arrows, red frames, dimming, native bar charts, coordinate conversion).
+When building with python-pptx, read `references/pptx-techniques.md` first and use the helpers in this skill's `scripts/slide_kit.py` (template header / title / footer, callouts that fit their text, curved and block arrows, red frames, dimming, native bar charts, coordinate conversion). Check the result with `scripts/render_check.py`: it renders every page, a thumbnail sheet for layout, and `footers.png`, a full-resolution strip of every footer.
 
 ## 11. Final checklist
 
@@ -172,4 +173,5 @@ When building with python-pptx, read `references/pptx-techniques.md` first and u
 - [ ] Red frames appear only on their own step and were zoom-checked for alignment; whole elements are dimmed, not framed
 - [ ] Every callout is connected by an arrow to what it explains; boxes fit the text; text is about 36 pt
 - [ ] About 1 minute of script per slide; at least 20 seconds per build step
+- [ ] Header and footer drawn with `chrome()`; `footers.png` from `render_check.py` shows footer text vertically centred inside its band on every page
 - [ ] Numbers match the source; build steps share page numbers; videos play

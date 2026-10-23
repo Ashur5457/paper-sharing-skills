@@ -219,3 +219,86 @@ def hbars(slide, x, y, rows, label_w=560, bar_w=760, vmax=100, bar_h=60, gap=34,
 def notes(slide, script):
     """speaker notes (write the full spoken script here)."""
     slide.notes_slide.notes_text_frame.text = script
+
+
+# ---------------------------------------------------------------------------
+# Template chrome: header, title and footer (Beamer Berlin + dolphin, measured)
+# ---------------------------------------------------------------------------
+# Every value is in the 1920 x 1080 canvas. Change TEMPLATE to match another
+# template after measuring it (see references/template-example.md).
+TEMPLATE = {
+    'header': [(0, 46, '4747BA'), (46, 88, '8585D1')],   # (top, bottom, colour) bands
+    'title': dict(x=72, y=120, w=1776, h=78, size=48, color='3333B2'),
+    'footer': dict(top=1040, bottom=1080, split=960,
+                   left_fill='4747BA', right_fill='8585D1',
+                   left_color='FFFFFF', right_color='1F1F5C', size=18, pad=36),
+}
+
+
+def new_deck(template_path=None):
+    """open a template PPTX, or create an empty 16:9 deck (20 x 11.25 in, i.e. 1 px = 9525 EMU)."""
+    from pptx import Presentation
+    prs = Presentation(template_path) if template_path else Presentation()
+    if not template_path:
+        prs.slide_width, prs.slide_height = Emu(18288000), Emu(10287000)
+    return prs
+
+
+def blank_slide(prs):
+    """add a slide on the layout with the fewest placeholders and remove any placeholders it brings."""
+    layout = min(prs.slide_layouts, key=lambda l: len(l.placeholders))
+    s = prs.slides.add_slide(layout)
+    for ph in list(s.placeholders):
+        ph._element.getparent().remove(ph._element)
+    return s
+
+
+def band_text(slide, x, y, w, h, t, size, color, align='l', bold=False):
+    """one line of text centred vertically inside a band.
+
+    The text box is exactly the band (same top and height), has zero insets, does not
+    autofit, and is anchored in the middle, so the baseline cannot drift above the band.
+    Footer text that sits too high is almost always a text box that is taller than the
+    band, starts above it, or is anchored to the top with default insets."""
+    els = text(slide, x, y, w, h, t, size=size, color=color, bold=bold, align=align, anchor='m')
+    tf = slide.shapes[-1].text_frame
+    tf.word_wrap = False
+    bodyPr = tf._txBody.find(qn('a:bodyPr'))
+    for tag in ('a:spAutoFit', 'a:normAutofit', 'a:noAutofit'):
+        el = bodyPr.find(qn(tag))
+        if el is not None:
+            bodyPr.remove(el)
+    bodyPr.append(bodyPr.makeelement(qn('a:noAutofit'), {}))
+    for p in tf.paragraphs:
+        pPr = p._p.get_or_add_pPr()
+        lnSpc = pPr.makeelement(qn('a:lnSpc'), {})
+        lnSpc.append(lnSpc.makeelement(qn('a:spcPct'), {'val': '100000'}))
+        pPr.insert(0, lnSpc)
+    return els
+
+
+def chrome(slide, title=None, deck_title='', credit='', page=None, total=None, header=True, footer=True):
+    """draw the template header bands, slide title and footer on a content slide.
+
+    footer left half: short deck title (right-aligned, white); right half: credit (e.g.
+    'Author / Institution, 2026') on the left and 'page / total' on the right.
+    Build steps of one concept pass the same `page`. Returns the title's elements."""
+    T = TEMPLATE
+    if header:
+        for top, bot, col in T['header']:
+            rect(slide, 0, top, _CANVAS_W, bot - top, fill=col, radius=0)
+    els = []
+    if title:
+        t = T['title']
+        els = text(slide, t['x'], t['y'], t['w'], t['h'], title, size=t['size'], color=t['color'], anchor='m')
+    if footer:
+        f = T['footer']
+        y, h = f['top'], f['bottom'] - f['top']
+        rect(slide, 0, y, f['split'], h, fill=f['left_fill'], radius=0)
+        rect(slide, f['split'], y, _CANVAS_W - f['split'], h, fill=f['right_fill'], radius=0)
+        band_text(slide, f['pad'], y, f['split'] - 2 * f['pad'], h, deck_title, f['size'], f['left_color'], align='r')
+        band_text(slide, f['split'] + f['pad'], y, 1200, h, credit, f['size'], f['right_color'])
+        if page is not None:
+            num = f'{page} / {total}' if total else str(page)
+            band_text(slide, _CANVAS_W - f['pad'] - 300, y, 300, h, num, f['size'], f['right_color'], align='r')
+    return els
