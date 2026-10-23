@@ -1,0 +1,15 @@
+{
+  "name": "paper-sharing-skills",
+  "description": "論文分享的 Claude skill 集合（論文討論簡報設計等）",
+  "owner": {
+    "name": "whats2000"
+  },
+  "plugins": [
+    {
+      "name": "paper-sharing-skills",
+      "source": "./",
+      "description": "論文分享的 skill 集合：論文討論簡報設計，之後陸續增加。",
+      "version": "0.1.0"
+    }
+  ]
+}
