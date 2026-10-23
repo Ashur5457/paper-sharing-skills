@@ -106,16 +106,30 @@ def text_width(t, size):
     return sum(em * (0.56 if ord(c) < 0x2E80 else 1.0) for c in t)
 
 
-def callout(slide, x, y, lines, size=36, w=None, align='c', anchor=None):
-    """red bold callout whose box fits its text. anchor='r' makes x the right edge.
-    returns (elements, (x, y, w, h))."""
+def callout_size(lines, size=36, w=None):
+    """(w, h) the callout box will have, so it can be positioned before it is drawn."""
     lh = size / 0.75 * 1.3
     padx, pady = 40, 26
     if w is None:
         w = max(text_width(l, size) for l in lines) + 2 * padx
-    h = lh * len(lines) + 2 * pady
+    return w, lh * len(lines) + 2 * pady
+
+
+def callout(slide, x, y, lines, size=36, w=None, align='c', anchor=None, valign='t'):
+    """red bold callout whose box fits its text.
+    anchor: None / 'l' -> x is the left edge, 'r' -> x is the right edge, 'c' -> x is the centre.
+    valign: 't' -> y is the top edge, 'm' -> y is the vertical centre, 'b' -> y is the bottom edge.
+    returns (elements, (x, y, w, h))."""
+    padx = 40
+    w, h = callout_size(lines, size, w)
     if anchor == 'r':
         x -= w
+    elif anchor == 'c':
+        x -= w / 2
+    if valign == 'm':
+        y -= h / 2
+    elif valign == 'b':
+        y -= h
     els = rect(slide, x, y, w, h, fill=GRAYBG, line=CALLLINE, line_w=1.5, radius=16)
     els += text(slide, x + padx * 0.5, y, w - padx, h, lines, size=size, color=CALLRED, bold=True, align=align, anchor='m')
     return els, (x, y, w, h)
@@ -198,21 +212,51 @@ def dim(elements, amt=30000):
     return elements
 
 
-def hbars(slide, x, y, rows, label_w=560, bar_w=760, vmax=100, bar_h=60, gap=34, size=26, track=False):
+def hide(slide, x, y, w, h, fill='FFFFFF', opacity=92000):
+    """cover a part of an image that has NOT been explained yet (build by subtraction on a single image).
+
+    This is the opposite of `dim`: `dim` fades what was already discussed, `hide` covers what is
+    still to come. Prefer cropping or splitting the image into its parts when the parts are
+    separable; use `hide` when they are not. Remove the cover on the step that explains that part."""
+    els = rect(slide, x, y, w, h, fill=fill, radius=0)
+    for c in els[0].iter(qn('a:srgbClr')):
+        c.append(c.makeelement(qn('a:alpha'), {'val': str(opacity)}))
+    return els
+
+
+def hbars(slide, x, y, rows, label_w=560, bar_w=760, vmax=100, vmin=0, bar_h=60, gap=34, size=26, track=False,
+          axis_color='5F5F6E'):
     """native horizontal bar chart. rows: [(label, value, colour, value_text), ...].
-    returns {label: (bar_x, bar_y, bar_w, bar_h, value_text_right_edge)}."""
+
+    Negative values are supported: set vmin < 0 (e.g. vmin=-2000, vmax=16000). The zero line is
+    drawn and bars grow left or right from it. Positive values are labelled just outside the bar end;
+    negative values just right of the zero line, so labels never collide with the row labels.
+    returns {label: (bar_x, bar_y, bar_w, bar_h, value_text_outer_edge)} with bar_x the left edge."""
     out = {}
+    span = vmax - vmin
+    bx0 = x + label_w
+    zx = bx0 + bar_w * (0 - vmin) / span
+    n = len(rows)
+    if vmin < 0:
+        rect(slide, zx - 1.5, y - 10, 3, n * (bar_h + gap) - gap + 20, fill=axis_color, radius=0)
     for i, (lab, v, col, vt) in enumerate(rows):
         yy = y + i * (bar_h + gap)
         text(slide, x, yy, label_w - 24, bar_h, lab, size=size, align='r', anchor='m')
-        bx = x + label_w
         if track:
-            rect(slide, bx, yy, bar_w, bar_h, fill='E6E6EC', radius=0)
-        bw = max(4, bar_w * v / vmax)
-        rect(slide, bx, yy, bw, bar_h, fill=col, radius=0)
-        vx = bx + (bar_w if track else bw) + 18
-        text(slide, vx, yy, 260, bar_h, vt, size=size + 2, bold=True, anchor='m')
-        out[lab] = (bx, yy, bw, bar_h, vx + text_width(vt, size + 2))
+            rect(slide, bx0, yy, bar_w, bar_h, fill='E6E6EC', radius=0)
+        bw = max(4, bar_w * abs(v) / span)
+        left = zx if v >= 0 else zx - bw
+        rect(slide, left, yy, bw, bar_h, fill=col, radius=0)
+        tw = text_width(vt, size + 2)
+        if v >= 0:
+            vx = (bx0 + bar_w if track else left + bw) + 18
+            text(slide, vx, yy, tw + 20, bar_h, vt, size=size + 2, bold=True, anchor='m')
+            edge = vx + tw
+        else:                              # right of the zero line, so it never collides with the row label
+            vx = zx + 18
+            text(slide, vx, yy, tw + 20, bar_h, vt, size=size + 2, bold=True, anchor='m')
+            edge = vx + tw
+        out[lab] = (left, yy, bw, bar_h, edge)
     return out
 
 
@@ -280,8 +324,10 @@ def band_text(slide, x, y, w, h, t, size, color, align='l', bold=False):
 def chrome(slide, title=None, deck_title='', credit='', page=None, total=None, header=True, footer=True):
     """draw the template header bands, slide title and footer on a content slide.
 
-    footer left half: short deck title (right-aligned, white); right half: credit (e.g.
-    'Author / Institution, 2026') on the left and 'page / total' on the right.
+    footer left half: short deck title (right-aligned, white); right half: `credit` on the left
+    and 'page / total' on the right. `credit` names the SOURCE being discussed: its authors or
+    institution and year (e.g. 'Ken Goldberg / UC Berkeley, 2026'), not the presenter; the
+    presenter's name goes on the cover.
     Build steps of one concept pass the same `page`. Returns the title's elements."""
     T = TEMPLATE
     if header:
@@ -301,4 +347,152 @@ def chrome(slide, title=None, deck_title='', credit='', page=None, total=None, h
         if page is not None:
             num = f'{page} / {total}' if total else str(page)
             band_text(slide, _CANVAS_W - f['pad'] - 300, y, 300, h, num, f['size'], f['right_color'], align='r')
+    return els
+
+
+# ---------------------------------------------------------------------------
+# Lists, videos and QR codes
+# ---------------------------------------------------------------------------
+def bullets(slide, x, y, w, h, items, size=28, color=INK, char='•', indent=None, space_after=10):
+    """bullet list with real paragraph bullets and a hanging indent.
+
+    Do not type '•' into the text: its width differs between CJK and Latin runs and between
+    renderers, so wrapped lines no longer align. items: str or [(text, style), ...] per line, as in `text`."""
+    els = text(slide, x, y, w, h, items, size=size, color=color)
+    tf = slide.shapes[-1].text_frame
+    k = _font_scale(slide)
+    ind = indent if indent is not None else size / 0.75 * 1.1   # px
+    for p in tf.paragraphs:
+        pPr = p._p.get_or_add_pPr()
+        pPr.set('marL', str(int(_px(slide, ind))))
+        pPr.set('indent', str(-int(_px(slide, ind))))
+        for tag in ('a:buNone', 'a:buChar', 'a:buAutoNum', 'a:buFont', 'a:spcAft'):
+            el = pPr.find(qn(tag))
+            if el is not None:
+                pPr.remove(el)
+        spc = pPr.makeelement(qn('a:spcAft'), {})
+        spc.append(spc.makeelement(qn('a:spcPts'), {'val': str(int(space_after * k * 100))}))
+        pPr.append(spc)
+        pPr.append(pPr.makeelement(qn('a:buFont'), {'typeface': LATIN_FONT}))
+        pPr.append(pPr.makeelement(qn('a:buChar'), {'char': char}))
+    return els
+
+
+_VIDEO_MIME = {'.mp4': 'video/mp4', '.m4v': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm',
+               '.wmv': 'video/x-ms-wmv', '.avi': 'video/x-msvideo'}
+
+
+def video(slide, path, x, y, w, h, poster=None, autoplay=True, loop=True, mute=True):
+    """embed a video inside (x, y, w, h) keeping its aspect ratio (from the poster frame).
+
+    poster: still image shown before playback and in renders (extract one with
+    paper-project-setup's `asset_tools.py posters`). With autoplay=True every video on the slide
+    starts together when the slide appears; loop=True repeats until the slide ends. Call it once per
+    video; the slide's timing is rebuilt each time so several videos play in sync.
+    returns (elements, box). Test playback in PowerPoint: LibreOffice renders only the poster."""
+    import os
+    box = (x, y, w, h)
+    if poster:
+        with Image.open(poster) as im:
+            r = im.width / im.height
+        if w / h > r:
+            nw = h * r
+            box = (x + (w - nw) / 2, y, nw, h)
+        else:
+            nh = w / r
+            box = (x, y + (h - nh) / 2, w, nh)
+    X, Y, W, H = box
+    mime = _VIDEO_MIME.get(os.path.splitext(path)[1].lower(), 'video/mp4')
+    mv = slide.shapes.add_movie(path, _px(slide, X), _px(slide, Y), _px(slide, W), _px(slide, H),
+                                poster_frame_image=poster, mime_type=mime)
+    el = mv._element
+    spid = el.find('.//' + qn('p:cNvPr')).get('id')
+    _VIDEOS.setdefault(id(slide._element), []).append((spid, autoplay, loop, mute))
+    _video_timing(slide)
+    return [el], box
+
+
+_VIDEOS = {}   # slide element id -> [(shape id, autoplay, loop, mute)]
+
+
+def _video_timing(slide):
+    """(re)build <p:timing> so the slide's videos autoplay together and loop as flagged by `video`."""
+    from lxml import etree
+    P = 'http://schemas.openxmlformats.org/presentationml/2006/main'
+    sld = slide._element
+    vids = _VIDEOS.get(id(sld), [])
+    old = sld.find(qn('p:timing'))
+    if old is not None:
+        sld.remove(old)
+    if not vids:
+        return
+    n = [2]
+
+    def nid():
+        n[0] += 1
+        return str(n[0])
+
+    autos = [v for v in vids if v[1]]
+    seq = ''
+    if autos:                               # ids in document order: 2 = mainSeq, then the wrappers
+        outer, inner = nid(), nid()
+        calls = []
+        for k, (i, _, _, _) in enumerate(autos):
+            calls.append(
+                f'<p:par><p:cTn id="{nid()}" presetID="1" presetClass="mediacall" presetSubtype="0" fill="hold" '
+                f'nodeType="{"afterEffect" if k == 0 else "withEffect"}"><p:stCondLst><p:cond delay="0"/></p:stCondLst>'
+                f'<p:childTnLst><p:cmd type="call" cmd="playFrom(0.0)"><p:cBhvr><p:cTn id="{nid()}" dur="indefinite" fill="hold"/>'
+                f'<p:tgtEl><p:spTgt spid="{i}"/></p:tgtEl></p:cBhvr></p:cmd></p:childTnLst></p:cTn></p:par>')
+        seq = (f'<p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>'
+               f'<p:par><p:cTn id="{outer}" fill="hold"><p:stCondLst><p:cond delay="indefinite"/>'
+               f'<p:cond evt="onBegin" delay="0"><p:tn val="2"/></p:cond></p:stCondLst><p:childTnLst>'
+               f'<p:par><p:cTn id="{inner}" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>'
+               + ''.join(calls) +
+               '</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn>'
+               '<p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst>'
+               '<p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq>')
+    media = []
+    for i, _, lp, mu in vids:
+        rep = ' repeatCount="indefinite"' if lp else ''
+        mute = ' mute="1"' if mu else ''
+        media.append(
+            f'<p:video><p:cMediaNode vol="80000"{mute}><p:cTn id="{nid()}"{rep} fill="hold" display="0">'
+            f'<p:stCondLst><p:cond delay="indefinite"/></p:stCondLst></p:cTn>'
+            f'<p:tgtEl><p:spTgt spid="{i}"/></p:tgtEl></p:cMediaNode></p:video>')
+    xml = (f'<p:timing xmlns:p="{P}"><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot">'
+           f'<p:childTnLst>{seq}{"".join(media)}</p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>')
+    timing = etree.fromstring(xml)
+    ext = sld.find(qn('p:extLst'))
+    if ext is not None:
+        ext.addprevious(timing)
+    else:
+        sld.append(timing)
+
+
+def qr(slide, data, x, y, size=300, label=None, label_size=22):
+    """QR code for `data` (a URL or event link) at (x, y), size x size px, with an optional caption below.
+
+    Uses `segno` (pure Python; install with `pip install segno`). If it is missing, or `data` is
+    empty because the user has not given the link or event code yet, draws a labelled placeholder
+    box instead; list every placeholder in the handoff so the user can fill it in."""
+    import os
+    import tempfile
+    els = []
+    try:
+        if not data:
+            raise ValueError('no data')
+        import segno
+        fd, png = tempfile.mkstemp(suffix='.png')
+        os.close(fd)
+        segno.make(data, error='m').save(png, scale=20, border=2)
+        e, _ = picture(slide, png, x, y, size, size, alt=data)
+        els += e
+        os.remove(png)
+    except Exception:
+        els += rect(slide, x, y, size, size, fill='FFFFFF', line=MUTED, line_w=2, radius=8)
+        els += text(slide, x, y, size, size, ['QR', 'placeholder'], size=24, color=MUTED, align='c', anchor='m')
+    if label:
+        lw = max(size + 80, text_width(label, label_size) + 24)
+        els += text(slide, x + size / 2 - lw / 2, y + size + 10, lw, label_size / 0.75 * 1.4, label,
+                    size=label_size, color=MUTED, align='c')
     return els

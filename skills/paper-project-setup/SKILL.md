@@ -24,7 +24,7 @@ Note what kind of source each is (peer-reviewed paper, preprint, technical repor
 
 ## 2. Create the project folder
 
-Ask where projects live if it is not known (e.g., a `Paper/` folder on the user's computer); otherwise use the location the user names. Create one folder per topic with a short kebab-case name, and run `scripts/asset_tools.py init` to lay out:
+Ask where projects live if it is not known (e.g., a `Paper/` folder on the user's computer); otherwise use the location the user names. Create one folder per topic with a short kebab-case name, and run `scripts/asset_tools.py init <dir> --title "<paper title>" --url <each source page>` (the title is required; add `meta <dir> --source-type <type> --date <date>` too) to lay out:
 
 ```
 <topic>/
@@ -72,13 +72,13 @@ Add each asset with `scripts/asset_tools.py add` (or edit `manifest.json`). Each
 | Field | Meaning |
 |---|---|
 | `file` | path inside the project folder |
-| `type` | `pdf`, `figure`, `video`, `poster`, `data`, `screenshot` |
+| `type` | `pdf` (a PDF), `text` (saved page text or notes: .md / .txt / .bib), `page` (saved HTML / JS of a web page), `figure`, `video`, `poster`, `data`, `screenshot`; `add` refuses a type that does not match the file extension |
 | `label` | what it is, e.g., "Fig. 1 benchmark results", "demo: pour bolts" |
 | `source_url` | where it came from (page URL and, if different, the direct file URL) |
 | `obtained` | `direct`, `release`, `browser`, `screenshot`, `user` |
 | `notes` | caption, figure number, licence or attribution notes, anything odd |
 
-Also record the assets you could not get and why, so the gap is visible.
+Also record the assets you could not get and why with `asset_tools.py missing <dir> "what" --source URL --reason "why"`, so the gap is visible. `check` warns when the manifest has no title or sources, or an asset's type does not match its file.
 
 ## 6. Prepare assets for slides
 

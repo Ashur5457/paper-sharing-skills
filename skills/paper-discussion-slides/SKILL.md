@@ -44,6 +44,8 @@ Read `references/examples.md` before building: it has the full positive and nega
 ### How to split: by subtraction
 1. Build the complete slide first.
 2. Duplicate it several times and, in each copy, delete what has not been explained yet. The first step is mostly empty; show only what has been said; the last step equals the complete slide.
+   - **When the slide is one image whose parts are explained in turn** (a pipeline figure, a diagram), there is nothing separate to delete. Prefer cropping the image into its parts and placing them as separate pictures; if the parts cannot be separated cleanly, cover the parts not yet explained with `hide()` (an opaque white cover) and remove the cover on the step that explains that part.
+   - `hide()` and `dim()` are opposites: `hide` covers what is **still to come**; `dim` fades what was **already discussed** so the current element stands out. Do not use one for the other.
 3. All build steps of one concept share one page number, because logically they are one slide.
 4. Every build step needs at least 20 seconds of script. If a step only gets one sentence, it is split too finely; merge it.
 
@@ -58,6 +60,7 @@ Read `references/examples.md` before building: it has the full positive and nega
 - **Solid block arrow** (light grey-blue, bold): for a direct "this → therefore", e.g., pointing straight down from two framed lines to the callout "this is the example".
 - Arrows, like frames, exist only on the step that discusses them and leave with them.
 - Start the arrow close to the element and end it close to the callout; do not cross other content; usually one arrow per slide.
+- **When the target sits inside an image** (a label in the middle of a figure), the arrow cannot avoid the image. Then, in this order: (1) place the callout on an empty or already-hidden area of the image right next to the frame, so the arrow is short or unnecessary; (2) otherwise put the callout beside the image on the side nearest the frame and let the arrow run straight over the image along the shortest path, crossing only parts that are not being discussed; (3) never route an arrow over another framed or labelled element. A short arrow over the image is better than a long detour around it.
 
 ### Callouts: box fits the text, text is large
 - Size the box to the text: about one line-height of padding around it. No large boxes with small text.
@@ -109,6 +112,7 @@ Video, images and charts are not defaults; choose by condition:
 - Exact numbers that do not fit on the slide go into the notes.
 - Flag limitations the authors admit and the strength of their wording (e.g., if the paper says "in some cases", remind the audience it is not yet reliable).
 - On the source slide, state what kind of source it is (e.g., "a research blog, not a peer-reviewed paper").
+- **Poll slides:** the question slide's script is only what the speaker says while the room votes: read the question, explain each option in one sentence, say how to join (about 30–60 seconds; Chinese ≈ 100–200 characters). The reveal slide gets a normal script (about 1 minute: the answer, the evidence, one follow-up question). The waiting time is not scripted; it is already inside the 3 minutes counted for the interaction (section 6).
 - End the last slide with an open question and mark the pause.
 
 ---
@@ -120,8 +124,8 @@ Video, images and charts are not defaults; choose by condition:
   1. List the key points and estimate each one's explanation time (usually 1–1.5 minutes; a point that needs step-by-step guidance may take 2–3 minutes spread over several build slides).
   2. After writing the script, convert its length to minutes with the speaking rate above and add interaction time.
   3. If over time, cut key points first; do not compress the explanation of each point, and do not cram a point that needs a build back into one slide.
-- Reference: a 30-minute talk fits roughly 15–17 key points. The number of physical slides varies with builds; 20 or 30 slides can both be right.
-- Count each interaction as at least 3 minutes (joining, waiting for votes, revealing, follow-up), taken out of the time budget, not added on top. At most 2–3 interactions per 30 minutes.
+- Count each interaction as at least 3 minutes (joining, waiting for votes, revealing, follow-up), covering both its question and reveal slides, and take it out of the time budget, not add it on top. At most 2–3 interactions per 30 minutes.
+- Reference, with the arithmetic: a 30-minute talk **without interactions** fits roughly 15–17 key points (about 1.5–2 minutes each, including the opening and closing). Each interaction removes about 3 minutes, i.e. about 2 key points: with 2 interactions, 24 minutes ≈ 12–14 key points; with 3 interactions, 21 minutes ≈ 11–13 key points. The poll's question and reveal slides belong to the interaction, not to the key-point count. The number of physical slides varies with builds; 20 or 30 slides can both be right.
 
 **Counter-example (badly over time):** a talk planned for 30 minutes packed 23 key points and 10 interactions, and split parallel lists into many one-sentence slides (74 physical slides). It ran 90 minutes, three times over. The problem was too many points and interactions and splitting without reason, not "more than 20 pages".
 
@@ -133,7 +137,8 @@ Video, images and charts are not defaults; choose by condition:
 
 The goal is for the room to think together, not one person talking while everyone else does something else.
 
-- Put a QR code and the event code near the start; put a small QR code in the corner of poll slides.
+- Put a QR code and the event code near the start; put a small QR code in the corner of poll slides. Draw it with `qr()` from `slide_kit.py`.
+- If the user has not given the event link or code, ask once when they are present; otherwise use `qr()` with empty data (it draws a labelled placeholder), write "event code to be filled in" in the notes, and list every placeholder in the handoff.
 - Use "guess, then reveal": a question slide (options + a related image, no answer) → a reveal slide (red callout with the answer + the evidence).
 - Formats: the same question as a pre-test and post-test (to see whether opinions changed), predict a number, guess the best / worst, word cloud, a 60-second discuss-with-your-neighbour open question.
 - Terms in poll options follow section 4 as well.
@@ -145,8 +150,12 @@ The goal is for the room to think together, not one person talking while everyon
 
 - **The template constrains only the header, footer, fonts and text colours.** Lay out everything else to fit the content.
 - Do not copy a layout from an example slide without asking why it looks that way. For instance, an example slide may use a grey monospace code box because it shows a language-model prompt; when the content is not a prompt, that style does not apply.
-- When the user provides a template, first measure its header, footer, title position, colours and fonts, then lay out the slides. When no template is provided, ask which one to use.
-- `references/template-example.md` shows how to write down a template specification (a Beamer Berlin + dolphin theme converted to PPTX). `assets/sample-template.pptx` (preview: `assets/sample-template-preview.png`) is a finished reference deck in that template: cover, content slides with callout, arrows and frame, two build steps sharing a page number, and side-by-side blocks.
+- **Which template to use, decided in this order:**
+  1. The user supplied a template (PPTX, a theme name, or a deck to match): measure its header, footer, title position, colours and fonts, set them in `TEMPLATE` in `scripts/slide_kit.py`, and build with `new_deck('their-template.pptx')` so its masters and fonts come along. Copy slides from it only if it contains slides whose content should be reused (a fixed cover, a logo slide).
+  2. The user or the project notes say no template was supplied, or the user says to use the default: use the built-in default without asking: `new_deck()` with the default `TEMPLATE` (Beamer Berlin + dolphin). Say in the handoff that the default was used.
+  3. Nothing is known about a template and the user is present: ask once whether they have one; if they have none, use the default.
+- `assets/sample-template.pptx` (preview: `assets/sample-template-preview.png`) is a **reference deck to look at, not a file to open and edit**: it shows what the default template looks like when finished (cover, content slides with callout, arrows and frame, two build steps sharing a page number, side-by-side blocks), built by `scripts/build_sample_template.py` from the same `slide_kit` calls you will use. `references/template-example.md` lists the default's measured values and how to measure another template.
+- **Footer credit** (`chrome(..., credit=...)`) names the **source being discussed**: its authors or institution and year (e.g. "Ken Goldberg / UC Berkeley, 2026"). The presenter's name and affiliation go on the cover, not in the footer.
 - **Draw the header and footer with `chrome()` from `scripts/slide_kit.py`, never by hand.** Hand-drawn footers drift: a text box taller than its band, starting above it, or anchored to the top with default insets puts the footer text too high. `chrome()` makes every footer text box exactly the band, with zero insets, no autofit, and middle anchoring. For another template, measure it and change `TEMPLATE` in `slide_kit.py` once, rather than adjusting slides one by one.
 
 ---
@@ -161,7 +170,7 @@ The goal is for the room to think together, not one person talking while everyon
 
 ## 10. Building PPTX files
 
-When building with python-pptx, read `references/pptx-techniques.md` first and use the helpers in this skill's `scripts/slide_kit.py` (template header / title / footer, callouts that fit their text, curved and block arrows, red frames, dimming, native bar charts, coordinate conversion). Check the result with `scripts/render_check.py`: it renders every page, a thumbnail sheet for layout, and `footers.png`, a full-resolution strip of every footer.
+When building with python-pptx, read `references/pptx-techniques.md` first and use the helpers in this skill's `scripts/slide_kit.py` (template header / title / footer, callouts that fit their text and can be centred, curved and block arrows, red frames, dimming and hiding, native bar charts with negative values, real bullet lists, autoplaying and looping videos, QR codes, coordinate conversion). Use `bullets()` for lists instead of typing '•' (a typed bullet has different widths in CJK and Latin text, so wrapped lines misalign). Check the result with `scripts/render_check.py`: it renders every page, a thumbnail sheet for layout, and `footers.png`, a full-resolution strip of every footer.
 
 ## 11. Final checklist
 
@@ -173,5 +182,8 @@ When building with python-pptx, read `references/pptx-techniques.md` first and u
 - [ ] Red frames appear only on their own step and were zoom-checked for alignment; whole elements are dimmed, not framed
 - [ ] Every callout is connected by an arrow to what it explains; boxes fit the text; text is about 36 pt
 - [ ] About 1 minute of script per slide; at least 20 seconds per build step
+- [ ] Template chosen in the order of section 8; footer credit names the source, presenter is on the cover
 - [ ] Header and footer drawn with `chrome()`; `footers.png` from `render_check.py` shows footer text vertically centred inside its band on every page
-- [ ] Numbers match the source; build steps share page numbers; videos play
+- [ ] Numbers match the source; build steps share page numbers
+- [ ] Videos embedded with `video()` and a poster frame; playback tested in PowerPoint, or the handoff says it was not tested
+- [ ] Lists use `bullets()` (no typed '•'); every QR or event-code placeholder is listed in the handoff

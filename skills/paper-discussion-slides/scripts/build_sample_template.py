@@ -12,10 +12,10 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from slide_kit import (new_deck, blank_slide, chrome, text, rect, callout, arc_arrow, frame,
-                       block_arrow, dim, notes, MUTED, BLUE, GRAYBG)
+                       block_arrow, dim, bullets, qr, notes, MUTED, BLUE, GRAYBG)
 
 DECK = 'Short Deck Title'
-CREDIT = 'Author / Institution, 2026'
+CREDIT = 'Source Authors / Institution, 2026'   # the work being discussed, not the presenter
 TOTAL = 3
 
 
@@ -32,8 +32,9 @@ def cover(prs):
     text(s, 360, 405, 1200, 68, 'Original Paper / Article Title', size=32, color='3333B2', align='c')
     text(s, 360, 490, 1200, 60, 'Authors · Venue or Source Type · Date', size=26, align='c')
     placeholder(s, 460, 600, 1000, 260, 'cover strip: figures from the source')
-    text(s, 1000, 940, 840, 90, ['Presented by Your Name', 'Your Institution'], size=24, align='r')
-    notes(s, 'Cover: no header or footer. Title in the talk language; original title, authors, source type and date below.')
+    text(s, 1000, 940, 840, 90, ['Presented by Presenter Name', 'Presenter Institution'], size=24, align='r')
+    notes(s, 'Cover: no header or footer. Title in the talk language; original title, authors, source type and date below; '
+             'the presenter goes bottom right. The footer credit on later slides names the source authors.')
     return s
 
 
@@ -69,8 +70,10 @@ def blocks(prs):
         rect(s, x, 260, 840, 70, fill=BLUE, radius=12)
         text(s, x + 28, 260, 800, 70, head, size=32, color='FFFFFF', bold=True, anchor='m')
         rect(s, x, 330, 840, 380, fill=GRAYBG, radius=12)
-        text(s, x + 28, 360, 790, 330, ['• ' + b for b in body], size=30)
-    notes(s, 'Blocks: accent title bar, light grey body, keywords and numbers only.')
+        bullets(s, x + 28, 360, 790, 330, body, size=30)
+    qr(s, '', 1620, 740, 200, label='Slido QR (placeholder)')
+    notes(s, 'Blocks: accent title bar, light grey body with real bullets (bullets()), keywords and numbers only. '
+             'The QR placeholder shows what qr() draws when no event link is known yet.')
     return s
 
 

@@ -2,7 +2,9 @@
 """asset_tools: set up and maintain a paper project folder.
 
   init    <dir> --title T [--url U ...]          create the folder layout, README.md and manifest.json
+  meta    <dir> [--title T] [--url U ...] [--source-type S] [--date D]   set or extend the manifest header
   add     <dir> <file> --type T --label L --source URL --obtained HOW [--notes N]
+  missing <dir> "what" --source URL --reason R   record an asset that could not be collected
   shrink  <video> [--width 1280] [--crf 28]      write <name>_small.mp4 next to it (needs ffmpeg)
   posters <video> --at 0.1 0.5 0.9 [--out DIR]   extract still frames at fractions of the duration (needs ffmpeg)
   check   <dir>                                  verify every manifest file exists and opens
@@ -19,7 +21,14 @@ import subprocess
 import sys
 
 SUBDIRS = ['source', 'figures', 'videos', 'posters', 'data', 'screenshots']
-TYPES = ['pdf', 'figure', 'video', 'poster', 'data', 'screenshot']
+TYPES = ['pdf', 'text', 'page', 'figure', 'video', 'poster', 'data', 'screenshot']
+# pdf: a PDF file; text: saved page text or notes (.md / .txt / .bib); page: saved HTML / JS of a web page
+EXPECTED_EXT = {
+    'pdf': {'.pdf'}, 'text': {'.md', '.txt', '.bib', '.tex'}, 'page': {'.html', '.htm', '.js', '.css'},
+    'figure': {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'}, 'poster': {'.png', '.jpg', '.jpeg', '.webp'},
+    'screenshot': {'.png', '.jpg', '.jpeg', '.webp'}, 'video': {'.mp4', '.webm', '.mov', '.m4v'},
+    'data': {'.json', '.csv', '.tsv', '.js', '.xlsx'},
+}
 OBTAINED = ['direct', 'release', 'browser', 'screenshot', 'user']
 
 
@@ -34,6 +43,8 @@ def _save(p, m):
 
 def init(a):
     root = pathlib.Path(a.dir)
+    if not a.title:
+        sys.exit('init needs --title (the paper or article title); add --url for each source page')
     for d in SUBDIRS:
         (root / d).mkdir(parents=True, exist_ok=True)
     p, m = _manifest(root)
@@ -66,11 +77,46 @@ def init(a):
     print(f'initialised {root}')
 
 
+def meta(a):
+    root = pathlib.Path(a.dir)
+    p, m = _manifest(root)
+    if a.title:
+        m['title'] = a.title
+    if a.url:
+        m['sources'] = sorted(set(m.get('sources', []) + a.url))
+    if a.source_type:
+        m['source_type'] = a.source_type
+    if a.date:
+        m['date'] = a.date
+    _save(p, m)
+    print(json.dumps({k: m.get(k) for k in ('title', 'sources', 'source_type', 'date')}, ensure_ascii=False))
+
+
+def missing(a):
+    root = pathlib.Path(a.dir)
+    p, m = _manifest(root)
+    entry = {'what': a.what, 'source_url': a.source, 'reason': a.reason}
+    m['missing'] = [e for e in m.get('missing', []) if not (isinstance(e, dict) and e.get('what') == a.what)] + [entry]
+    _save(p, m)
+    print(f'recorded missing: {a.what}')
+
+
 def add(a):
     root = pathlib.Path(a.dir)
     p, m = _manifest(root)
     f = pathlib.Path(a.file)
-    rel = f.relative_to(root).as_posix() if f.is_absolute() and root.resolve() in f.resolve().parents else f.as_posix()
+    if f.resolve().is_relative_to(root.resolve()):      # given relative to cwd or absolute
+        rel = f.resolve().relative_to(root.resolve()).as_posix()
+    elif (root / f).exists():                            # given relative to the project folder
+        rel = f.as_posix()
+    else:
+        sys.exit(f'{f}: not found inside {root}')
+    if not (root / rel).is_file():
+        sys.exit(f'{rel}: file does not exist in {root}')
+    ext = pathlib.Path(rel).suffix.lower()
+    if ext not in EXPECTED_EXT.get(a.type, {ext}):
+        sys.exit(f'{rel}: a {ext} file is not type "{a.type}"; use one of: '
+                 + (', '.join(k for k, v in EXPECTED_EXT.items() if ext in v) or 'data'))
     entry = {'file': rel, 'type': a.type, 'label': a.label, 'source_url': a.source, 'obtained': a.obtained, 'notes': a.notes or ''}
     m['assets'] = [e for e in m['assets'] if e['file'] != rel] + [entry]
     _save(p, m)
@@ -115,6 +161,15 @@ def check(a):
     root = pathlib.Path(a.dir)
     _, m = _manifest(root)
     bad = 0
+    warn = []
+    if not m.get('title'):
+        warn.append('manifest has no title (asset_tools.py meta <dir> --title ...)')
+    if not m.get('sources'):
+        warn.append('manifest has no source URLs (asset_tools.py meta <dir> --url ...)')
+    for e in m['assets']:
+        ext = pathlib.Path(e['file']).suffix.lower()
+        if ext not in EXPECTED_EXT.get(e.get('type'), {ext}):
+            warn.append(f'{e["file"]}: type "{e.get("type")}" does not match a {ext} file')
     try:
         from PIL import Image
     except ImportError:
@@ -150,7 +205,9 @@ def check(a):
     for x in sorted(set(extra) - listed):
         print(f'NOTE {x}: not in manifest')
     for miss in m.get('missing', []):
-        print(f'MISSING {miss}')
+        print(f'MISSING {miss.get("what") if isinstance(miss, dict) else miss}')
+    for w in warn:
+        print(f'WARN {w}')
     print(f'{len(m["assets"]) - bad} / {len(m["assets"])} assets OK')
     sys.exit(1 if bad else 0)
 
@@ -159,6 +216,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sp = ap.add_subparsers(dest='cmd', required=True)
     p = sp.add_parser('init'); p.add_argument('dir'); p.add_argument('--title', default=''); p.add_argument('--url', nargs='*'); p.set_defaults(fn=init)
+    p = sp.add_parser('meta'); p.add_argument('dir'); p.add_argument('--title'); p.add_argument('--url', nargs='*')
+    p.add_argument('--source-type', dest='source_type'); p.add_argument('--date'); p.set_defaults(fn=meta)
+    p = sp.add_parser('missing'); p.add_argument('dir'); p.add_argument('what'); p.add_argument('--source', default='')
+    p.add_argument('--reason', required=True); p.set_defaults(fn=missing)
     p = sp.add_parser('add'); p.add_argument('dir'); p.add_argument('file')
     p.add_argument('--type', required=True, choices=TYPES); p.add_argument('--label', required=True)
     p.add_argument('--source', required=True); p.add_argument('--obtained', required=True, choices=OBTAINED)

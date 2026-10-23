@@ -4,13 +4,13 @@ A template specification that was used in practice. It shows which values to mea
 
 **Beamer Berlin theme + dolphin colour scheme, converted to PPTX (1920×1080 px canvas, 20 × 11.25 in slide, 1 px = 9525 EMU)**
 
-Reference deck: `assets/sample-template.pptx` (built by `scripts/build_sample_template.py`; preview `assets/sample-template-preview.png`).
+This is the built-in default template: with no user template, use `new_deck()` and the default `TEMPLATE` as they are. Reference deck to look at (not to open and edit): `assets/sample-template.pptx` (built by `scripts/build_sample_template.py`; preview `assets/sample-template-preview.png`).
 
 - **Header:** two full-width colour bands: 0–46 px `#4747BA`, 46–88 px `#8585D1`. No navigation text.
 - **Slide title:** top left, x = 72, y = 120, height 78, 48 pt, `#3333B2`, regular weight, vertically centred in its box.
 - **Footer:** 1040–1080 px (40 px band), split at x = 960:
   - left half `#4747BA`: short deck title, right-aligned, white, 18 pt;
-  - right half `#8585D1`: "author / institution, year" on the left and "page / total" on the right, `#1F1F5C`, 18 pt;
+  - right half `#8585D1`: the **source's** "authors / institution, year" (the work being discussed, not the presenter) on the left and "page / total" on the right, `#1F1F5C`, 18 pt;
   - 36 px padding from the band edges;
   - **each footer text box has exactly the band's top and height, zero insets, no autofit, and middle anchoring.** A text box that is taller than the band, starts above it, or is top-anchored with default insets renders the text too high (this happened in a real deck: the boxes were 44 px tall starting at 1036 px, 4 px above the band, top-anchored).
 - **Cover:** no header or footer; title, original title, authors / source / date, a cover strip of source figures, logos bottom left, "Presented by …" bottom right.
