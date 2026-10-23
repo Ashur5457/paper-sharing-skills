@@ -1,42 +1,45 @@
-# PPTX 製作技術（python-pptx）
+# PPTX techniques (python-pptx)
 
-- 以模板 PPTX 複製頁面（深拷貝 spTree 並重新對應 rels），最後刪掉原模板頁。
-- 影片用 `add_movie` 嵌入並附 poster frame；檔案過大時用 ffmpeg 重新編碼（例如 crf 28、寬 1280）。同頁多段影片要一起看時，設成同時自動播放並循環。
-- 半透明：對圖片 blip 加 `alphaModFix`，對顏色 `srgbClr` 加 `alpha`。
-- 圓角：`ROUNDED_RECTANGLE` 的 adjustments 依尺寸設定半徑。
-- 弧線箭頭：用二次貝茲曲線取約 30 個點，以 `build_freeform` 畫成不封閉的折線，填色設為無、線條設紅色粗線（約 10pt），並在 `a:ln` 加 `a:tailEnd type="triangle"` 和 `cap="rnd"`。控制點取兩端中點沿垂直方向偏移（偏移量約為兩點距離的 0.35–0.45 倍）。
-- 方塊箭頭：`MSO_SHAPE.DOWN_ARROW`／`RIGHT_ARROW` 等，實心淺灰藍、無外框。
-- 用 LibreOffice 轉 PDF、pdftoppm 轉圖逐頁檢查。
+- Duplicate slides from the template PPTX (deep-copy the `spTree` and remap the relationships), then delete the original template slides at the end.
+- Embed videos with `add_movie` and a poster frame. If the file is too large, re-encode with ffmpeg (e.g., crf 28, width 1280). When several videos on one slide should be watched together, set them to autoplay and loop together.
+- Dimming: add `alphaModFix` to an image's `blip`, and `alpha` to `srgbClr` colours.
+- Rounded corners: set the `ROUNDED_RECTANGLE` adjustment from the box size.
+- Curved arrows: sample about 30 points of a quadratic Bézier curve and draw them as an open polyline with `build_freeform`; no fill, thick red line (about 10 pt), and add `a:tailEnd type="triangle"` and `cap="rnd"` to `a:ln`. Place the control point at the midpoint, offset perpendicular to the line by about 0.35–0.45 × the distance between the ends.
+- Block arrows: `MSO_SHAPE.DOWN_ARROW` / `RIGHT_ARROW` etc., solid light grey-blue, no outline.
+- Check every slide by converting to PDF with LibreOffice and rendering pages with pdftoppm.
 
-## 工具函式
+## Helpers
 
-`scripts/slide_kit.py` 收錄上面這些技術的實作，以 1920×1080 的像素座標操作，座標、字級、線寬都會依投影片實際寬度等比例換算（字級以 20 吋寬投影片的 pt 計，在 13.33 吋投影片上比例相同）。使用前 `pip install python-pptx pillow`，把 scripts 資料夾加到 `sys.path`：
+`scripts/slide_kit.py` implements the techniques above. It works in a 1920×1080 pixel canvas; coordinates, font sizes and line widths are scaled to the real slide width (font sizes are points on a 20-inch-wide slide, so proportions stay the same on a 13.33-inch slide). Install `python-pptx` and `pillow`, then add the `scripts` folder to `sys.path`.
 
-| 函式 | 用途 |
+| Function | Purpose |
 |---|---|
-| `text(slide, x, y, w, h, paras, size, ...)` | 文字框；`paras` 可以是字串、字串清單，或 `(文字, 樣式)` 片段清單 |
-| `rect(slide, x, y, w, h, fill, line, radius)` | 圓角矩形 |
-| `callout(slide, x, y, lines, size=36, anchor=None)` | 紅字說明框，大小自動貼合文字；`anchor='r'` 時 x 是右邊界；回傳 `(元素, 方框座標)` |
-| `frame(slide, x, y, w, h)` | 紅框 |
-| `sub(rect, tl, br, pad)` | 用比例座標（在原尺寸素材上量）換算成投影片座標 |
-| `arc_arrow(slide, p0, p1, bend)` | 紅色弧線箭頭；`bend` 正負決定彎曲方向，接近 0 是直線 |
-| `block_arrow(slide, x, y, w, h, direction)` | 淺灰藍實心方塊箭頭 |
-| `dim(elements, amt)` | 把元素調成半透明 |
-| `picture(slide, path, x, y, w, h)` | 等比例放入方框，回傳圖片實際涵蓋的範圍（給 `sub` 用） |
-| `hbars(slide, x, y, rows, ...)` | 原生水平長條圖，回傳每根長條的位置（給箭頭用） |
+| `text(slide, x, y, w, h, paras, size, ...)` | Text box; `paras` is a string, a list of strings, or a list of `(text, style)` runs |
+| `rect(slide, x, y, w, h, fill, line, radius)` | Rounded rectangle |
+| `callout(slide, x, y, lines, size=36, anchor=None)` | Red callout whose box fits its text; with `anchor='r'`, `x` is the right edge; returns `(elements, box)` |
+| `frame(slide, x, y, w, h)` | Red frame |
+| `sub(box, tl, br, pad)` | Convert fractional coordinates measured on the original asset into slide coordinates |
+| `arc_arrow(slide, p0, p1, bend)` | Red curved arrow; the sign of `bend` sets the direction, near 0 is straight |
+| `block_arrow(slide, x, y, w, h, direction)` | Solid light grey-blue block arrow |
+| `dim(elements, amt)` | Make elements semi-transparent |
+| `picture(slide, path, x, y, w, h)` | Fit an image into a box keeping its aspect ratio; returns the box it actually covers (for `sub`) |
+| `hbars(slide, x, y, rows, ...)` | Native horizontal bar chart; returns each bar's position (for arrows) |
+| `notes(slide, script)` | Write the speaker script |
 
-範例：
+Example:
 
 ```python
+import sys
+sys.path.insert(0, 'path/to/skills/paper-discussion-slides/scripts')
 from pptx import Presentation
 from slide_kit import *
 
 prs = Presentation('template.pptx')
 s = prs.slides.add_slide(prs.slide_layouts[6])
 _, r = picture(s, 'chart.png', 72, 222, 1150, 770)
-f = sub(r, (0.0, 0.37), (0.95, 0.43), pad=6)      # 在原圖上量出的比例
+f = sub(r, (0.0, 0.37), (0.95, 0.43), pad=6)      # fractions measured on the original image
 frame(s, *f)
-_, b = callout(s, 1290, f[1] + f[3] / 2 - 85, ['唯一沒贏：', '80.0 vs 81.3'])
+_, b = callout(s, 1290, f[1] + f[3] / 2 - 85, ['The only loss:', '80.0 vs 81.3'])
 block_arrow(s, f[0] + f[2] + 8, f[1] + f[3] / 2 - 30, b[0] - (f[0] + f[2]) - 16, 60, 'right')
 prs.save('out.pptx')
 ```

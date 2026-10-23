@@ -1,6 +1,6 @@
 {
   "name": "paper-sharing-skills",
-  "description": "論文分享的 Claude skill 集合（論文討論簡報設計等）",
+  "description": "Claude skills for sharing research papers (paper discussion slides, and more to come)",
   "owner": {
     "name": "whats2000"
   },
@@ -8,7 +8,7 @@
     {
       "name": "paper-sharing-skills",
       "source": "./",
-      "description": "論文分享的 skill 集合：論文討論簡報設計，之後陸續增加。",
+      "description": "Skills for sharing research papers: paper discussion slide design, with more to come.",
       "version": "0.1.0"
     }
   ]

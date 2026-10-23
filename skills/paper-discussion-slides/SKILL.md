@@ -1,170 +1,173 @@
 ---
 name: paper-discussion-slides
-description: Designs paper-discussion, journal-club and research-sharing slide decks (PPTX or Canva) that put audience understanding first. Use when asked to make 論文分享簡報、論文討論簡報、讀書會簡報、paper discussion slides, journal club deck, or a talk explaining a paper: defines the problem first, splits a concept into progressive builds only when it needs step-by-step reasoning, aligns red frames precisely, connects callouts with arrows, explains every term on first use, and budgets time by key points and script length rather than page count.
----
-# 論文討論簡報設計
-
-適用：社群、讀書會、實驗室的論文 discussion 簡報。觀眾通常是有興趣但不一定是該領域專家的學生與從業者。
-
-## 總原則：一切以「觀眾更好理解」為方向
-
-下面每條規則都是為了這個目標。遇到規則沒寫到的情況，就問：「這樣做，觀眾會不會更容易理解？」答案是否定的就不要做，即使某條規則看起來允許。規則不是預設要套用的模板，而是判斷工具。
-
+description: Designs paper-discussion, journal-club and research-sharing slide decks (PPTX or Canva) that put audience understanding first. Use when asked to make paper discussion slides, a journal club deck, a reading-group presentation, a talk explaining a research paper, or 論文分享／論文討論／讀書會簡報. Defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects callouts to what they explain with arrows, spells out every term on first use, and budgets time by key points and script length rather than page count.
 ---
 
-## 1. 製作流程（照順序，不要跳步）
+# Paper Discussion Slides
 
-1. **讀原文、抓素材**：從論文、專案頁、blog 抓下原始圖片、影片、圖表數據（網頁互動圖表的數據常在 `data.js`、JSON 等檔案，可直接讀取）。不要自己生成插圖代替原文素材。保留每個影片／圖的原始網址。
-2. **定義問題與敘事線**：先寫出「這篇要回答什麼問題、為什麼重要」，再排出結構：問題 → 方法 → 結果 → 討論（原因／限制）→ Take-away ＋ Open Question。
-3. **算預算**：依講者給的時間決定能講幾個要點（見第 6 節）。預算算的是**要點與講解時間，不是頁數**。超過就先刪要點，不要壓縮每個要點的講解時間。
-4. **每個概念做成一張完整單頁**，決定呈現方式（第 3 節）。
-5. **為每頁寫完整講稿**（約 1 分鐘，見第 5 節）。
-6. **逐頁判斷是否需要拆講**（第 2 節）。只有這個概念需要細部、分步引導才拆，用減法拆。
-7. **用講稿重新估時間**（字數 ÷ 每分鐘約 200–250 字，加上互動時間），超過就合併步驟或刪要點。頁數因拆講自然增加是正常的，不用為了湊頁數而合併。
-8. **檢查**（第 11 節）：數字對照原文、紅框放大檢查、名詞首次出現有全稱、說明框字級與箭頭、講稿長度、頁碼。
+For paper-discussion talks at meetups, reading groups, journal clubs and labs. Assume the audience is interested but not necessarily expert in the field (students and practitioners).
+
+Write the slides and speaker notes in the language the user asks for (default: the language the user writes in).
+
+## Overarching principle: everything serves audience understanding
+
+Every rule below exists for this goal. When a situation is not covered, ask: "Does doing this make it easier for the audience to understand?" If not, do not do it, even if some rule seems to allow it. The rules are judgment tools, not a template to apply by default.
 
 ---
 
-## 2. 逐步講解（build）：例外，不是預設
+## 1. Workflow (in order; do not skip steps)
 
-### 什麼時候拆
-- **核心判斷：這個概念需不需要細部解釋、分步引導觀眾思考？**
-  - 需要：觀眾要先想通這一步，才能理解下一步（例如先用熟悉的例子讓觀眾想、再點出原理、最後帶出新東西）→ 拆。
-  - 不需要：重點是一個「整體一看就懂」的關係 → 放在一起，一頁講完。
-- 要不要拆只看「這個要點需不需要分步講解」，不看頁數。拆了之後頁數自然增加是正常的；只要每一步都有東西可講（≥ 20 秒），時間就會反映在講稿上。
-- **並列清單、單純介紹、一眼就懂的關係不要拆。**
-
-完整的正例與反例（開場 build、組合關係、並列清單）見 `references/examples.md`。製作前先讀。
-
-### 怎麼拆：減法
-1. 先做好完整的那一頁。
-2. 複製該頁數次，每份刪掉「還沒講到」的元素。第一頁大部分是空的，講到哪顯示到哪，最後一頁等於完整頁。
-3. 同一概念的 build 頁使用同一個頁碼，代表邏輯上是同一張投影片。
-4. 每個 build 步驟講稿至少 20 秒；只寫得出一句話代表拆太細，合併。
-
-### 紅框與說明框
-- 紅框只框「這一頁新增或正在講的那部分」，說明框寫那部分的意涵，講稿詳細講。
-- 框只存在於講到它的那一頁。換下一個重點時舊框移除，不留在畫面干擾觀眾。
-- **紅框 vs 半透明**：紅框只用來圈出「一張圖裡的某個部分」。若要講的是一整張圖／一整個元素（例如三張圖中的第三張），不要加框，而是把其他（已講過的）元素調成半透明，凸顯目前這個。
-
-### 箭頭：把「正在講的東西」連到說明框
-- 說明框不要孤零零放在角落。用箭頭把目前講的元素（或紅框）連到它的說明框，觀眾一眼就知道「這句話在解釋哪裡」。
-- **弧線箭頭**（紅色、粗線、圓頭、箭頭在末端）：用在「從前一個元素引出一個問題或想法」，例如從 prompt 框彎過來指向「做得到嗎？」的提示框。弧線有「引導視線、接著想」的感覺。
-- **實心方塊箭頭**（淺灰藍色、粗大）：用在「這裡 → 所以」的直接因果，例如從紅框框住的那兩行，直直往下指向「這就是範例」的說明框。
-- 箭頭和紅框一樣只存在於講到它的那一頁，換重點時一起移走。
-- 箭頭起點貼近被講的元素、終點貼近說明框，不要跨過其他內容；一頁通常只用一個箭頭。
-
-### 說明框：框貼合文字、字要大
-- 說明框的大小要貼合文字：上下左右留約一行字高的空白就好，不要大框裡放小字。
-- 字級要讓後排看得清楚：在 1920×1080 的頁面上，說明框文字約 36pt（約為頁面標題的 2/3），粗體紅字；最少不低於 28pt。
-- 說明框寫 1–3 行重點即可；寫不下代表內容該放進講稿，而不是把字縮小。
-
-**反例**：一個 860×350 px 的大說明框裡放 20–24pt 的五行字，框佔了半頁，字卻小到後排讀不到，觀眾只看到一大塊灰色。正確做法：刪到 2–3 行，字放大到 36pt，框縮到剛好包住文字，並用箭頭連到它在解釋的元素。
-
-### 一頁＝一個概念，可重用同一張圖
-- 同一張圖可以在多頁出現，只要每頁的重點不同（例如同一張長條圖，先框 A 組、下一頁框 B 組），讓觀眾從不同角度看同一份資料。
-- 不該出現「同樣內容、同樣重點」的重複頁。
-- 寫講稿時發現一頁塞了好幾個概念，就代表要拆或分頁。
+1. **Read the source and collect assets.** Download the original figures, videos and chart data from the paper, project page or blog (data for interactive web charts often lives in files such as `data.js` or JSON and can be read directly). Do not generate illustrations to stand in for the paper's own material. Keep the original URL of every video and figure.
+2. **Define the problem and the storyline.** First write down what question the paper answers and why it matters, then lay out the structure: problem → method → results → discussion (reasons / limitations) → take-away + open question.
+3. **Budget.** From the time the speaker has, decide how many key points fit (section 6). The budget is **key points and explanation time, not page count**. If over budget, cut key points first; never squeeze the explanation time of each point.
+4. **Make every concept a complete single slide** and choose how to present it (section 3).
+5. **Write the full speaker script for every slide** (about 1 minute; section 5).
+6. **Decide slide by slide whether a concept needs a progressive build** (section 2). Split only when the concept needs detailed, step-by-step guidance, and split by subtraction.
+7. **Re-estimate time from the script** (script length ÷ speaking rate, plus interaction time). If over, merge steps or cut key points. More pages because of builds is normal; never merge just to reduce page count.
+8. **Check** (section 11): numbers against the source, frames zoomed in, full names on first use, callout size and arrows, script length, page numbers.
 
 ---
 
-## 3. 先想這頁要傳達什麼，再決定用什麼呈現
+## 2. Progressive builds: the exception, not the default
 
-影片、圖片、圖表都不是預設，視條件選擇：
+### When to split
+- **Core question: does this concept need detailed explanation that guides the audience's thinking step by step?**
+  - Yes: the audience has to work through this step before the next one makes sense (e.g., start with a familiar example, then name the principle, then introduce the new idea) → split.
+  - No: the point is a relationship that is understood at a glance → keep it together on one slide.
+- Decide only by whether the point needs step-by-step explanation, not by page count. Splitting naturally adds pages; as long as every step has something to say (≥ 20 seconds), the time shows up in the script.
+- **Do not split parallel lists, simple introductions, or relationships that are obvious at a glance.**
 
-| 這頁的重點 | 呈現方式 |
+Read `references/examples.md` before building: it has the full positive and negative examples (an opening build, a composition relationship, an over-split parallel list).
+
+### How to split: by subtraction
+1. Build the complete slide first.
+2. Duplicate it several times and, in each copy, delete what has not been explained yet. The first step is mostly empty; show only what has been said; the last step equals the complete slide.
+3. All build steps of one concept share one page number, because logically they are one slide.
+4. Every build step needs at least 20 seconds of script. If a step only gets one sentence, it is split too finely; merge it.
+
+### Red frames and callouts
+- A red frame marks only the part that is new or being discussed on this step; the callout states what that part means; the script explains it in detail.
+- A frame lives only on the step that discusses it. When the focus moves on, remove the old frame so it does not distract.
+- **Red frame vs. dimming:** use a red frame only to circle *a part of one image*. When the subject is a whole image or a whole element (e.g., the third of three pictures), do not frame it; dim the other (already discussed) elements instead.
+
+### Arrows: connect what is being discussed to its callout
+- Do not leave a callout floating in a corner. Draw an arrow from the element (or red frame) being discussed to its callout, so the audience sees at once what the sentence explains.
+- **Curved arrow** (red, thick, round cap, arrowhead at the end): for "this leads to a question or idea", e.g., curving from a prompt box to a "can this work?" callout. The curve guides the eye and invites the next thought.
+- **Solid block arrow** (light grey-blue, bold): for a direct "this → therefore", e.g., pointing straight down from two framed lines to the callout "this is the example".
+- Arrows, like frames, exist only on the step that discusses them and leave with them.
+- Start the arrow close to the element and end it close to the callout; do not cross other content; usually one arrow per slide.
+
+### Callouts: box fits the text, text is large
+- Size the box to the text: about one line-height of padding around it. No large boxes with small text.
+- Make the text readable from the back row: on a 1920×1080 slide, about 36 pt bold red (roughly 2/3 of the slide title), never below 28 pt.
+- 1–3 lines per callout. If it does not fit, the content belongs in the script; do not shrink the font.
+
+**Counter-example:** an 860×350 px callout with five lines of 20–24 pt text takes half the slide while the text is unreadable from the back; the audience sees a big grey block. Fix: cut to 2–3 lines, enlarge to 36 pt, shrink the box to fit, and connect it with an arrow to what it explains.
+
+### One slide = one concept; the same figure may be reused
+- The same figure can appear on several slides as long as each slide makes a different point (e.g., frame group A on one slide and group B on the next), letting the audience look at the same data from different angles.
+- Never repeat a slide with the same content and the same point.
+- If the script for one slide covers several concepts, split it or give each concept its own slide.
+
+---
+
+## 3. Decide what the slide must convey, then how to show it
+
+Video, images and charts are not defaults; choose by condition:
+
+| What the slide is about | Presentation |
 |---|---|
-| 過程或動作「怎麼發生」（失敗如何一步步發生、機器人如何移動手臂取得視角） | 影片 |
-| 某個瞬間或細節（相機畫面、時間軸上的某一刻） | 圖片／截圖，必要時加紅框 |
-| 數字比較 | 圖表（可重畫，標註「重繪自原文 Fig. N 數據」） |
-| 邏輯或流程 | 示意圖 |
-| 並列項目 | 一次排開，不拆頁 |
-| 組合或因果關係（A＋B⇒C） | 幾段影片／圖用「＋」「⇒」連成一行並排（影片同時播放），一頁講完 |
+| How a process or action happens (how a failure unfolds, how a robot moves its arm to get a view) | Video |
+| A moment or a detail (a camera view, one instant on a timeline) | Image / screenshot, with a red frame if needed |
+| Comparing numbers | Chart (may be redrawn; label "redrawn from the paper's Fig. N data") |
+| Logic or a pipeline | Diagram |
+| Parallel items | All laid out at once; no splitting |
+| Composition or cause and effect (A + B ⇒ C) | Videos / images in one row joined by "+" and "⇒" (videos playing simultaneously); one slide |
 
-- 原文有影片不代表要放；放了影片卻只講一個靜態重點，觀眾會看錯地方。
-- **視覺優先**：幾乎沒有純文字頁。投影片上只放關鍵詞和數字，完整解說放講者備註。文字太多時觀眾在讀字，而不是在聽、在想。
-
----
-
-## 4. 專有名詞：第一次出現就寫全稱並解釋
-
-- 縮寫第一次出現時寫成「全稱（縮寫）＋一句白話解釋」，例如「In-Context Learning（ICL）：不改模型權重，只靠放進上下文的例子學會任務」。之後才可以只用縮寫。
-- 投影片和講稿都要做到，不能假設觀眾已經知道。
-- 開場特別要避免直接丟出縮寫。
-- **不要做集中的「名詞小抄頁」**：一次塞一堆名詞，觀眾記不住，真正用到時早就忘了。在名詞第一次被用到的那一頁解釋。
-
-**反例**：一張投票頁的選項直接寫「ICL」「SOTA」「VLA」「harness」「System 2」，觀眾第一次看到這些詞時沒有任何解釋，根本無法作答。正確做法：在這些詞第一次出現的頁面寫出全稱（如 State-of-the-Art（SOTA）：目前已發表的最佳結果；Vision-Language-Action model（VLA）：直接從影像與指令輸出機器人動作的模型）。
+- Having a video in the source does not mean it belongs on the slide; a video used for a single static point makes the audience look in the wrong place.
+- **Visual first:** almost no text-only slides. Put only keywords and numbers on the slide and the full explanation in the speaker notes. With too much text, the audience reads instead of listening and thinking.
 
 ---
 
-## 5. 講者備註
+## 4. Terms: full name and plain explanation on first use
 
-- 每頁都要有完整口語講稿：這頁要講什麼、原文怎麼說、數字細節。
-- **長度＝時間**：一般頁約 1 分鐘（中文口語約 200–250 字）；build 頁每步至少 20 秒（約 70–90 字）。
-- 投影片放不下的精確數值寫在備註。
-- 標出作者承認的限制與措辭強度（例如原文寫「in some cases」，要提醒觀眾還不穩定）。
-- 資料來源頁講清楚來源性質（例如「這是研究 blog，不是同儕審查論文」）。
-- 最後一頁以 Open Question 收尾並標註停頓。
+- On first use, write an abbreviation as "Full Name (ABBR) + one plain-language sentence", e.g., "In-Context Learning (ICL): the model learns a task from examples placed in its context, without changing its weights." Use the abbreviation alone only after that.
+- Do this on the slide and in the script; never assume the audience already knows.
+- Be especially careful not to open the talk with unexplained abbreviations.
+- **No glossary slide.** A slide full of terms is forgotten by the time a term is used. Explain each term on the slide where it is first needed.
 
----
-
-## 6. 時長預算：由要點和講稿決定，不由頁數決定
-
-- **長度是由要點決定的。** 先決定要講幾個要點，每個要點需要多少講解時間；有些要點自然要拆成好幾頁逐步講，頁數就自然增加。**頁數不是硬規定，用頁數估時間是不準的。**
-- 估時間的方法：
-  1. 列出要點，每個要點估講解時間（一般約 1–1.5 分鐘；需要分步引導思考的要點可能 2–3 分鐘，分散在幾頁 build 上）。
-  2. 寫完講稿後，用字數換算（中文口語每分鐘約 200–250 字），加上互動時間，得到總時間。
-  3. 超過預定時間，先刪要點，不要壓縮每個要點的講解時間、也不要把該拆的要點硬擠回一頁。
-- 參考值：一份 30 分鐘的簡報，大約能講 15–17 個要點。實體頁數會因拆講而不同，20 頁或 30 頁都可能是對的，看要點怎麼講。
-- 互動每個至少算 3 分鐘（加入、等待投票、揭曉、追問），從時間預算中扣掉，不是另外加。30 分鐘內最多 2–3 個互動。
-
-**反例（嚴重超時）**：一份預定 30 分鐘的簡報塞了 23 個要點、10 個互動，又把並列清單拆成很多一句話的頁（74 張實體頁），實際講了 90 分鐘，超時 3 倍。問題在要點與互動太多、拆得沒有理由，而不是「頁數超過 20」。
-
-**反例（把頁數當硬規定）**：為了壓在 20 頁以內，把需要分步引導的要點硬擠成一頁，或是刪掉該有的 build 步驟。頁數變少了，觀眾反而跟不上。
+**Counter-example:** a poll slide whose options read "ICL", "SOTA", "VLA", "harness", "System 2" when the audience has never seen these terms explained; nobody can answer it. Fix: on the slide where each term first appears, write it in full (e.g., State-of-the-Art (SOTA): the best published result; Vision-Language-Action model (VLA): a model that maps images and instructions directly to robot actions).
 
 ---
 
-## 7. 互動設計（Slido 一類工具）
+## 5. Speaker notes
 
-目標是讓台下一起思考，而不是一人講、台下各做各的事。
-
-- 開場附近放 QR code 與活動代碼；投票頁角落放小 QR。
-- 形式「先猜再揭曉」：題目頁（選項＋相關圖片，不揭曉）→ 揭曉頁（紅色提示框寫答案＋證據圖）。
-- 題型：前測／後測同一題（比較想法有無改變）、預測數字、猜最好／最差、文字雲、計時 60 秒與鄰座討論的開放問題。
-- 選項中的專有名詞同樣遵守第 4 節。
-- 備註寫：工具怎麼設定、預期答案、揭曉後的追問。
-
----
-
-## 8. 版面與模板
-
-- **模板只約束：頁首、頁尾、字型、文字配色。** 其他依內容自由排版。
-- 不要照抄範本某頁的版型而不問原因。例如範本有一頁用灰底等寬字的程式碼框，是因為那頁在展示語言模型的 prompt；內容不是 prompt 時就不該套那個樣式。
-- 使用者有提供模板時，先從模板量出頁首、頁尾、標題位置、色碼與字型，再開始排版。沒有提供時，先問使用者要用哪份模板。
-- 模板規格的寫法範例（Beamer Berlin＋dolphin 轉成 PPTX）見 `references/template-example.md`。
+- Every slide has a full spoken script: what the slide says, what the paper says, the numbers.
+- **Length = time.** A normal slide is about 1 minute (English ≈ 130–150 words; Chinese ≈ 200–250 characters). Each build step is at least 20 seconds (English ≈ 45–50 words; Chinese ≈ 70–90 characters).
+- Exact numbers that do not fit on the slide go into the notes.
+- Flag limitations the authors admit and the strength of their wording (e.g., if the paper says "in some cases", remind the audience it is not yet reliable).
+- On the source slide, state what kind of source it is (e.g., "a research blog, not a peer-reviewed paper").
+- End the last slide with an open question and mark the pause.
 
 ---
 
-## 9. 紅框必須精準對齊
+## 6. Time budget: set by key points and script, not by page count
 
-- 框的位置要在**原尺寸素材**上量：圖表用繪圖座標換算（重畫圖表時順便輸出各元素座標）；截圖在原圖上量出目標像素範圍。不可看縮圖估比例。
-- 圖片以 cover 方式裁切放進方框時，座標要用裁切後的範圍換算，否則框會整體偏移。
-- 每個有紅框的頁面都要**裁切放大檢查**：框完整包住目標、沒偏移、沒切到旁邊的東西。整份縮圖只能看版面，不能確認框的位置。
+- **Length is decided by the key points.** Decide how many points to make and how long each needs; some points naturally take several build slides, so the page count grows. **Page count is not a rule, and estimating time from page count is inaccurate.**
+- Estimate time like this:
+  1. List the key points and estimate each one's explanation time (usually 1–1.5 minutes; a point that needs step-by-step guidance may take 2–3 minutes spread over several build slides).
+  2. After writing the script, convert its length to minutes with the speaking rate above and add interaction time.
+  3. If over time, cut key points first; do not compress the explanation of each point, and do not cram a point that needs a build back into one slide.
+- Reference: a 30-minute talk fits roughly 15–17 key points. The number of physical slides varies with builds; 20 or 30 slides can both be right.
+- Count each interaction as at least 3 minutes (joining, waiting for votes, revealing, follow-up), taken out of the time budget, not added on top. At most 2–3 interactions per 30 minutes.
+
+**Counter-example (badly over time):** a talk planned for 30 minutes packed 23 key points and 10 interactions, and split parallel lists into many one-sentence slides (74 physical slides). It ran 90 minutes, three times over. The problem was too many points and interactions and splitting without reason, not "more than 20 pages".
+
+**Counter-example (treating page count as a rule):** to stay under 20 slides, a point that needs step-by-step guidance is crammed into one slide, or its build steps are removed. Fewer pages, but the audience can no longer follow.
 
 ---
 
-## 10. 製作 PPTX 的技術
+## 7. Interaction (Slido or similar)
 
-用 python-pptx 製作時，先讀 `references/pptx-techniques.md`，並直接使用這個 skill 資料夾裡 `scripts/slide_kit.py` 的工具函式（說明框自動貼合文字、弧線箭頭、方塊箭頭、紅框、半透明、原生長條圖、座標換算）。
+The goal is for the room to think together, not one person talking while everyone else does something else.
 
-## 11. 最後檢查清單
+- Put a QR code and the event code near the start; put a small QR code in the corner of poll slides.
+- Use "guess, then reveal": a question slide (options + a related image, no answer) → a reveal slide (red callout with the answer + the evidence).
+- Formats: the same question as a pre-test and post-test (to see whether opinions changed), predict a number, guess the best / worst, word cloud, a 60-second discuss-with-your-neighbour open question.
+- Terms in poll options follow section 4 as well.
+- In the notes, write how to set up the tool, the expected answers, and follow-up questions after the reveal.
 
-- [ ] 開場有先定義問題
-- [ ] 用講稿字數＋互動時間估出的總時間在預算內（不是用頁數估）
-- [ ] 拆講只用在需要分步引導思考的要點；並列清單、一眼就懂的關係沒被拆；該拆的沒有為了頁數硬擠成一頁
-- [ ] 每頁的呈現方式是為了它要傳達的重點而選
-- [ ] 每個專有名詞第一次出現都有全稱＋白話解釋，沒有名詞小抄頁
-- [ ] 紅框只在當頁、放大檢查過對齊；整體元素用半透明而非紅框
-- [ ] 說明框有箭頭連到它解釋的元素；框貼合文字、字約 36pt
-- [ ] 每頁講稿約 1 分鐘，build 步驟至少 20 秒
-- [ ] 數字對照原文、build 頁頁碼一致、影片可播放
+---
+
+## 8. Layout and template
+
+- **The template constrains only the header, footer, fonts and text colours.** Lay out everything else to fit the content.
+- Do not copy a layout from an example slide without asking why it looks that way. For instance, an example slide may use a grey monospace code box because it shows a language-model prompt; when the content is not a prompt, that style does not apply.
+- When the user provides a template, first measure its header, footer, title position, colours and fonts, then lay out the slides. When no template is provided, ask which one to use.
+- `references/template-example.md` shows how to write down a template specification (a Beamer Berlin + dolphin theme converted to PPTX).
+
+---
+
+## 9. Red frames must be aligned precisely
+
+- Measure frame positions on the **full-size asset**: for charts, convert from plotting coordinates (export element coordinates when redrawing a chart); for screenshots, measure the target's pixel range on the original image. Never estimate proportions from a thumbnail.
+- When an image is cover-cropped into a box, convert coordinates using the cropped range, or every frame will be offset.
+- **Zoom in on every slide with a frame:** crop and enlarge the area to confirm the frame fully encloses the target, is not offset, and does not cut into neighbouring content. A full-deck thumbnail sheet shows layout only; it cannot confirm frame positions.
+
+---
+
+## 10. Building PPTX files
+
+When building with python-pptx, read `references/pptx-techniques.md` first and use the helpers in this skill's `scripts/slide_kit.py` (callouts that fit their text, curved and block arrows, red frames, dimming, native bar charts, coordinate conversion).
+
+## 11. Final checklist
+
+- [ ] The talk opens by defining the problem
+- [ ] Total time estimated from script length + interaction time is within budget (not estimated from page count)
+- [ ] Builds are used only for points that need step-by-step guidance; parallel lists and at-a-glance relationships are not split; points that need a build were not crammed into one slide to save pages
+- [ ] Each slide's presentation was chosen for the point it makes
+- [ ] Every term has its full name + plain explanation on first use; no glossary slide
+- [ ] Red frames appear only on their own step and were zoom-checked for alignment; whole elements are dimmed, not framed
+- [ ] Every callout is connected by an arrow to what it explains; boxes fit the text; text is about 36 pt
+- [ ] About 1 minute of script per slide; at least 20 seconds per build step
+- [ ] Numbers match the source; build steps share page numbers; videos play

@@ -1,18 +1,18 @@
 # paper-sharing-skills
 
-論文分享的 skill 集合，給 Claude（Claude Code、claude.ai、Claude 桌面版）使用：從讀懂一篇論文，到把它講給別人聽。
+A set of [Claude](https://claude.ai) skills for sharing research papers, from understanding a paper to presenting it to others. Works in Claude Code, claude.ai and the Claude desktop app.
 
-所有 skill 都依同一個原則設計：**一切以「觀眾更好理解」為方向。**
+Every skill follows one principle: **everything serves audience understanding.**
 
 ## Skills
 
-| Skill | 用途 | 狀態 |
+| Skill | What it does | Status |
 |---|---|---|
-| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | 製作論文討論／讀書會簡報（PPTX 或 Canva）：先定義問題、只在需要分步引導時才拆成多頁、紅框精準對齊、用箭頭把重點連到說明框、專有名詞第一次出現就寫全稱並解釋、用要點與講稿估時間 | v0.1.0 |
+| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva): defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects every callout to what it explains with an arrow, spells out every term on first use, and budgets time by key points and script length rather than page count | v0.1.0 |
 
-之後會陸續加入其他論文分享相關的 skill。
+More paper-sharing skills will be added over time.
 
-## 安裝
+## Install
 
 ### Claude Code
 
@@ -21,50 +21,52 @@
 /plugin install paper-sharing-skills@paper-sharing-skills
 ```
 
-### Claude 桌面版／claude.ai
+### Claude desktop app / claude.ai
 
-到 [Releases](../../releases) 下載 `paper-sharing-skills.plugin`，在 Claude 裡上傳安裝；或把 `skills/` 底下的資料夾個別上傳成 skill。
+Download `paper-sharing-skills.plugin` from [Releases](../../releases) and install it in Claude, or upload any folder under `skills/` as an individual skill.
 
-## 使用方式
+## Usage
 
-安裝後直接說出需求，例如：
+Just describe what you need, for example:
 
-- 「幫我把這篇論文做成 30 分鐘的分享簡報，觀眾是對機器人有興趣的學生」
-- 「用我的模板（附檔）做這篇 paper 的 journal club slides」
+- "Make a 30-minute discussion deck for this paper; the audience is students interested in robotics."
+- "Build journal club slides for this paper using my template (attached)."
 
-Claude 會依 skill 的流程：讀原文抓素材 → 定義問題 → 規劃要點與時間 → 每個概念先做單頁、寫講稿 → 判斷哪些要點需要分步講 → 檢查紅框、名詞、說明框與時間。
+Claude follows the skill's workflow: read the source and collect its figures and videos → define the problem → plan key points and time → build each concept as one slide with a full script → decide which points need a progressive build → check frames, terms, callouts and timing.
 
-## 目錄結構
+Slides and speaker notes are written in whatever language you ask for.
+
+## Repository layout
 
 ```
 .claude-plugin/
-  plugin.json           # plugin 資訊
-  marketplace.json      # 讓 Claude Code 可以用 marketplace 安裝
+  plugin.json             # plugin metadata
+  marketplace.json        # lets Claude Code install this repo as a marketplace
 skills/
   paper-discussion-slides/
-    SKILL.md            # 核心規則（Claude 會先讀這份）
-    references/         # 詳細範例、模板規格範例、PPTX 技術
-    scripts/slide_kit.py# python-pptx 工具函式
+    SKILL.md              # core rules (Claude reads this first)
+    references/           # detailed examples, template spec example, PPTX techniques
+    scripts/slide_kit.py  # python-pptx helpers
 ```
 
-## 新增 skill
+## Adding a skill
 
-1. 在 `skills/` 底下建立新資料夾，名稱用 kebab-case（例如 `paper-reading-notes`）。
-2. 放一份 `SKILL.md`，開頭是 YAML frontmatter：
+1. Create a folder under `skills/` with a kebab-case name (e.g., `paper-reading-notes`).
+2. Add a `SKILL.md` that starts with YAML frontmatter:
    ```markdown
    ---
    name: paper-reading-notes
-   description: 用第三人稱寫清楚這個 skill 做什麼、什麼情況該用（附上使用者可能說的話）。
+   description: In the third person, say what the skill does and when to use it, including phrases a user might say.
    ---
    ```
-3. 內文寫給 Claude 看的指示；較長的範例與規格放進 `references/`，程式放進 `scripts/`。
-4. 更新本頁的 Skills 表格，並在 `.claude-plugin/plugin.json` 與 `marketplace.json` 調升版本號。
+3. Write the body as instructions for Claude. Put long examples and specifications in `references/` and code in `scripts/`.
+4. Add the skill to the table above and bump the version in `.claude-plugin/plugin.json` and `marketplace.json`.
 
-設計新 skill 時，沿用同一個總原則：每條規則都要能回答「這樣做，觀眾或讀者會不會更容易理解？」
+Keep the same principle for new skills: every rule should answer "does this make it easier for the audience or reader to understand?"
 
-## English summary
+## 中文說明
 
-A collection of Claude skills for sharing research papers. The first skill, `paper-discussion-slides`, designs paper-discussion / journal-club decks that put audience understanding first: define the problem before the results, split a concept across progressive build slides only when it needs step-by-step reasoning, align highlight frames precisely, connect every callout to what it explains with an arrow, spell out every term on first use, and budget time by key points and script length rather than page count. Skill content is written in Traditional Chinese.
+論文分享的 Claude skill 集合。第一個 skill `paper-discussion-slides` 用來製作以觀眾理解為核心的論文討論簡報：先定義問題、只在需要分步引導時才拆成多頁、紅框精準對齊、用箭頭把重點連到說明框、專有名詞第一次出現就寫全稱並解釋、用要點與講稿估時間。Skill 內容以英文撰寫，簡報可以指定任何語言（例如繁體中文）。
 
 ## License
 

@@ -1,15 +1,16 @@
-# 模板規格範例
+# Template specification example
 
-以下是一份實際使用過的模板規格，示範「模板只約束頁首、頁尾、字型、文字配色」時要量出哪些值。換成其他模板時，照同樣的項目量一次。
+A template specification that was used in practice. It shows which values to measure when "the template constrains only the header, footer, fonts and text colours". For another template, measure the same items.
 
-- **模板只約束：頁首、頁尾、字型、文字配色。** 其他依內容自由排版。
-- 不要照抄範本某頁的版型而不問原因。例如範本有一頁用灰底等寬字的程式碼框，是因為那頁在展示語言模型的 prompt；內容不是 prompt 時就不該套那個樣式。
-- 使用者的預設模板（Beamer Berlin 主題＋dolphin 配色轉成 PPTX，1920×1080）：
-  - 頁首兩條色帶：0–68 px `#4747BA`、68–117 px `#8585D1`；標題文字 `#3333B2`，左上。
-  - 頁尾分兩半：左 `#4747BA` 放簡報短標題（白字），右 `#8585D1` 放「作者機構, 年份」與「頁碼 / 總頁數」。
-  - 強調色 `#005AA0`、第二強調 `#C83C3C`、次要文字 `#5F5F6E`、區塊底色 `#F0F0F0`；紅色提示框字色約 `#FF5757`，淡灰底細藍框（`#99BDD9`）；方塊箭頭淺灰藍（約 `#C8D0DA`）。
-  - 字型：英文 Arial，中文微軟正黑體／Noto Sans CJK TC。
-  - 框格邊角可圓潤化。
-- 若使用者提供了不同模板，以該模板的頁首、頁尾、字型、配色為準。
+**Beamer Berlin theme + dolphin colour scheme, converted to PPTX (1920×1080 px canvas)**
 
----
+- **Header:** two colour bands: 0–68 px `#4747BA`, 68–117 px `#8585D1`. Slide title in `#3333B2`, top left.
+- **Footer:** split in two halves: left `#4747BA` with the short deck title (white text); right `#8585D1` with "author / institution, year" and "page / total".
+- **Colours:**
+  - accent `#005AA0`, second accent `#C83C3C`, secondary text `#5F5F6E`, block background `#F0F0F0`
+  - callout text about `#FF5757` on a light grey box with a thin blue border (`#99BDD9`)
+  - block arrows light grey-blue (about `#C8D0DA`)
+- **Fonts:** Latin Arial; CJK Microsoft JhengHei / Noto Sans CJK TC.
+- **Corners:** boxes may have rounded corners.
+
+Everything else (block layouts, image grids, code boxes) is not part of the template and should be chosen per slide for its content.

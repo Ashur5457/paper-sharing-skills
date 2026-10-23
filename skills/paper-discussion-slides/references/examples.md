@@ -1,15 +1,24 @@
-# 正例與反例
+# Positive and negative examples
 
-這些例子都來自實際製作與講完後的回饋。判斷「要不要拆」「怎麼呈現」時，拿來對照。
+These examples come from real decks and the feedback after presenting them. Use them as references when deciding whether to split a concept and how to present it.
 
-**正例（需要分步引導思考，拆開遠比單頁好）**：開場要讓觀眾理解「為什麼機器人需要一段影片示範」。
-1. 只放一個大家熟悉的語言模型單一範例提示（one-shot prompt）：灰底等寬字的框裡寫兩組問答，第一組是範例，第二組的答案（模型輸出）用綠色，下方一行灰色小字「綠色＝模型輸出」。頁面其他地方是空的，先讓觀眾看懂這個熟悉的東西。
-2. 在 prompt 框下方加一個紅字說明框：「這件事在實體世界的機器人操作上做得到嗎？」一條紅色弧線箭頭從 prompt 框左下方彎過來指向它。丟出問題，讓觀眾先自己想。
-3. 說明框換掉：用紅框框住第一組問答（當作範例的那兩行），一個淺灰藍實心向下箭頭從紅框指到下方說明框：「這就是範例！所以實體世界也需要某種範例。」點出原理：模型是靠上下文裡的範例學會任務的。
-4. 右半邊出現「具身模型：單一實體示範」的小標和原文的示範影片（人拿著夾爪示範倒螺絲），紅框與箭頭移除，說明框改成結論：「實體世界的範例就是影片示範。」把實體示範帶出來，作為上下文學習（In-Context Learning）在機器人上的對應機制。
-這四步是一條思考路徑：熟悉的例子 → 提問 → 原理 → 新機制。一次全部秀出來，觀眾會直接看到答案，跳過自己思考的過程；拆開讓每一步都有東西可想、可講（每步都超過 20 秒）。
+## Positive: needs step-by-step guidance, so splitting is far better than one slide
 
-**正例（一眼就懂的組合關係，不該拆）**：一頁講「組合泛化」，要傳達的是「A ＋ B ＝ 做完 A 之後接著做 B 的能力」。左邊是示範 A 的影片（拉開筆袋拉鍊），中間一個「＋」，再來是示範 B 的影片（從筆袋取出錢），接著一個「⇒」，最右邊是模型把 A、B 接成一段連續動作的影片；三段影片下方各有一行灰色小字說明，再下面一行重點：「兩段獨立示範 → 一段連續行為（含銜接、重新抓取、失誤修正）」。三段影片並排、同時播放，觀眾一眼就看到「左邊兩段＝右邊一段」。這個概念不需要細部解釋，重點就是這個關係本身；單獨秀 A 或 A＋B 時沒有東西可講（每步只剩一句話），拆開反而打斷這個等式。**版面本身就是解釋時，一頁講完。**
+The opening has to make the audience understand why a robot needs a video demonstration.
 
-**反例（並列清單被過度拆分）**：一頁「在 8 個真機平台、5 種機器人上驗證」被拆成 8 頁，每頁只秀一台機器人或一個條件，講稿只有一句話（5–15 秒）。觀眾不需要依序看這些平台，頻繁翻頁反而失焦。正確做法：1 頁、約 1–1.5 分鐘，五種機器人照片一次排開，測試條件放在下方。
+1. Show only a familiar language-model one-shot prompt: a grey monospace box with two Q&A pairs. The first pair is the example; the answer to the second pair (the model's output) is in green, with a small grey caption "green = model output" below. The rest of the slide is empty, so the audience first understands something familiar.
+2. Add a red callout below the prompt box: "Can we do this for robot manipulation in the physical world?" A red curved arrow sweeps from the lower-left of the prompt box to the callout. Pose the question and let the audience think first.
+3. Replace the callout: put a red frame around the first Q&A pair (the two lines that are the example), and a light grey-blue solid arrow points down from the frame to a callout below: "This is the example! So the physical world needs some kind of example too." This names the principle: the model learns the task from the example in its context.
+4. On the right half, add the subheading "Embodied model: one-shot physical prompt" and the paper's demonstration video (a person demonstrates pouring bolts with handheld grippers). Remove the frame and the arrow; the callout becomes the conclusion: "In the physical world, the example is a video demonstration." The physical demonstration is introduced as the robot counterpart of In-Context Learning.
 
+These four steps form one path of thought: familiar example → question → principle → new mechanism. Shown all at once, the audience sees the answer and skips the thinking; split, every step has something to think about and to say (each step over 20 seconds).
+
+## Positive: a relationship understood at a glance, so do not split
+
+One slide on "compositional generalization" whose point is "A + B = the ability to do A and then continue with B". On the left, a video of demonstration A (unzipping a pencil pouch); a "+"; a video of demonstration B (taking money out of the pouch); a "⇒"; on the far right, a video of the model chaining A and B into one continuous behaviour. Each video has a one-line grey caption, and one line of key message runs below: "two independent demos → one continuous behaviour (with transitions, regrasps and recovery)". The three videos sit side by side and play at the same time, so the audience sees at once that "the two on the left = the one on the right".
+
+The concept needs no detailed explanation; the point is the relationship itself. Showing only A, or A + B, leaves nothing to say (one sentence per step), and splitting breaks the equation. **When the layout itself is the explanation, use one slide.**
+
+## Negative: a parallel list split too far
+
+A slide "validated on 8 real platforms and 5 robot bodies" was split into 8 slides, each showing one robot or one condition with a single sentence of script (5–15 seconds). The audience did not need to see the platforms in sequence, and the constant page-turning lost them. Fix: one slide of about 1–1.5 minutes with all five robot photos in a row and the test conditions below.
