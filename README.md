@@ -8,6 +8,7 @@ Every skill follows one principle: **everything serves audience understanding.**
 
 | Skill | What it does | Status |
 |---|---|---|
+| [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | Sets up a project folder for one paper or topic and collects its media (PDF, figures, demo videos, chart data, screenshots) with source attribution: downloads automatically where possible (direct, released files, browser), asks the user only for what truly cannot be fetched, and keeps a manifest of every asset | v0.2.0 |
 | [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva): defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects every callout to what it explains with an arrow, spells out every term on first use, and budgets time by key points and script length rather than page count | v0.1.0 |
 
 More paper-sharing skills will be added over time.
@@ -31,8 +32,9 @@ Just describe what you need, for example:
 
 - "Make a 30-minute discussion deck for this paper; the audience is students interested in robotics."
 - "Build journal club slides for this paper using my template (attached)."
+- "Set up a folder for this paper and collect the figures and demo videos from its project page."
 
-Claude follows the skill's workflow: read the source and collect its figures and videos → define the problem → plan key points and time → build each concept as one slide with a full script → decide which points need a progressive build → check frames, terms, callouts and timing.
+If the paper has no project folder yet, Claude first runs `paper-project-setup` to create one and collect the figures, videos and chart data, then follows the slide workflow: define the problem → plan key points and time → build each concept as one slide with a full script → decide which points need a progressive build → check frames, terms, callouts and timing.
 
 Slides and speaker notes are written in whatever language you ask for.
 
@@ -43,6 +45,10 @@ Slides and speaker notes are written in whatever language you ask for.
   plugin.json             # plugin metadata
   marketplace.json        # lets Claude Code install this repo as a marketplace
 skills/
+  paper-project-setup/
+    SKILL.md              # folder layout, collection routes, manifest
+    references/           # browser extraction snippets
+    scripts/asset_tools.py# init / add / shrink / posters / check
   paper-discussion-slides/
     SKILL.md              # core rules (Claude reads this first)
     references/           # detailed examples, template spec example, PPTX techniques
@@ -66,7 +72,7 @@ Keep the same principle for new skills: every rule should answer "does this make
 
 ## 中文說明
 
-論文分享的 Claude skill 集合。第一個 skill `paper-discussion-slides` 用來製作以觀眾理解為核心的論文討論簡報：先定義問題、只在需要分步引導時才拆成多頁、紅框精準對齊、用箭頭把重點連到說明框、專有名詞第一次出現就寫全稱並解釋、用要點與講稿估時間。Skill 內容以英文撰寫，簡報可以指定任何語言（例如繁體中文）。
+論文分享的 Claude skill 集合。`paper-project-setup` 為每篇論文建立專案資料夾並收集圖片、影片、圖表數據（能自動下載就自動，真的抓不到才請使用者幫忙），並記錄每個素材的來源；`paper-discussion-slides` 用來製作以觀眾理解為核心的論文討論簡報：先定義問題、只在需要分步引導時才拆成多頁、紅框精準對齊、用箭頭把重點連到說明框、專有名詞第一次出現就寫全稱並解釋、用要點與講稿估時間。製作簡報前若主題還沒設定，會先執行 `paper-project-setup`。Skill 內容以英文撰寫，簡報可以指定任何語言（例如繁體中文）。
 
 ## License
 

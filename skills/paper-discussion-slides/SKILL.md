@@ -17,7 +17,9 @@ Every rule below exists for this goal. When a situation is not covered, ask: "Do
 
 ## 1. Workflow (in order; do not skip steps)
 
-1. **Read the source and collect assets.** Download the original figures, videos and chart data from the paper, project page or blog (data for interactive web charts often lives in files such as `data.js` or JSON and can be read directly). Do not generate illustrations to stand in for the paper's own material. Keep the original URL of every video and figure.
+Material comes first: the slides are built from the paper's own assets, collected by `paper-project-setup`.
+
+1. **Make sure the topic is set up.** If there is no project folder for this paper yet (a folder with a `manifest.json` listing the collected figures, videos and data), invoke the `paper-project-setup` skill first to create it and collect the source information and media files, then continue here. If the folder exists, read its `README.md` and `manifest.json`, and run setup again only for assets that are missing. Use the paper's own figures, videos and chart data; do not generate illustrations to stand in for them, and keep the source of every asset.
 2. **Define the problem and the storyline.** First write down what question the paper answers and why it matters, then lay out the structure: problem → method → results → discussion (reasons / limitations) → take-away + open question.
 3. **Budget.** From the time the speaker has, decide how many key points fit (section 6). The budget is **key points and explanation time, not page count**. If over budget, cut key points first; never squeeze the explanation time of each point.
 4. **Make every concept a complete single slide** and choose how to present it (section 3).
