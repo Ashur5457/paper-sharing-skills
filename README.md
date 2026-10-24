@@ -1,19 +1,91 @@
-# paper-sharing-skills
+<div align="center">
 
-A set of [Claude](https://claude.ai) skills for sharing research papers, from understanding a paper to presenting it to others. Works in Claude Code, claude.ai and the Claude desktop app.
+# 📑 paper-sharing-skills
 
-Every skill follows one principle: **everything serves audience understanding.**
+**Claude skills for sharing research papers, from collecting a paper's material to presenting it to a room.**
 
-## Skills
+Project folder + asset collection with source attribution · audience-first paper-discussion decks (PPTX or Canva) · progressive builds only where reasoning needs them · precise highlight frames · arrows from every callout · time budgeted by key points, not page count.
 
-| Skill | What it does | Status |
-|---|---|---|
-| [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | Sets up a project folder for one paper or topic and collects its media (PDF, figures, demo videos, chart data, screenshots) with source attribution: downloads automatically where possible (direct, released files, browser), asks the user only for what truly cannot be fetched, and keeps a manifest of every asset (typed, with title, sources and a missing list) | v0.2.1 |
-| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva): defines the problem first, splits a concept into progressive build slides only when it needs step-by-step reasoning, aligns highlight frames precisely, connects every callout to what it explains with an arrow, spells out every term on first use, and budgets time by key points and script length rather than page count; ships a reference template deck and draws the template header / footer with one helper; helpers for videos that autoplay and loop, QR codes, real bullets, diverging bar charts and centred callouts | v0.2.0 |
+![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=claude&logoColor=white)
+![Skills](https://img.shields.io/badge/skills-2-8A63D2)
+![Python](https://img.shields.io/badge/python-3-3776AB?logo=python&logoColor=white)
+![python-pptx](https://img.shields.io/badge/python--pptx-helpers-B7472A?logo=microsoftpowerpoint&logoColor=white)
+![Version](https://img.shields.io/badge/release-v0.3.0-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+**English** · [繁體中文](README.zh-TW.md)
+
+</div>
+
+---
+
+Every skill in this repo follows one principle: **everything serves audience understanding.** When a situation is not covered by a rule, Claude asks *"does doing this make it easier for the audience to understand?"* — and if not, it does not do it. The rules are judgment tools, not a template to apply by default.
+
+Works in **Claude Code**, **claude.ai** and the **Claude desktop app**.
+
+## ✨ What it does
+
+📁 One folder per paper · 🔗 Every asset sourced · 🙋 Ask only when necessary · 🎯 Problem first · 🪜 Builds only when needed · 🟥 Precise frames · ➡️ Arrows to callouts · 📖 Terms spelled out · ⏱️ Time by key points · 🎬 Videos & QR codes · 🌍 Any language
+
+<details>
+<summary><b>What each one means →</b></summary>
+
+<br>
+
+- **📁 One folder per paper.** `paper-project-setup` creates a tidy, self-describing project folder (`source/`, `figures/`, `videos/`, `posters/`, `data/`, `screenshots/`) with a README and a `manifest.json`.
+- **🔗 Every asset sourced.** Each figure, video, chart dataset and screenshot is recorded in the manifest with its type, label, source URL and how it was obtained — so slide captions can credit it correctly.
+- **🙋 Ask only when necessary.** Claude tries direct download, released files (GitHub / Hugging Face) and browser extraction before asking you for anything — and when it must ask, the request is precise enough to finish in one pass. Uncollectable items go into a `missing` list.
+- **🎯 Problem first.** Every deck opens by defining the problem the paper solves, before any method.
+- **🪜 Progressive builds only when needed.** A concept is split into build slides *by subtraction* only when it needs step-by-step reasoning — never by default.
+- **🟥 Precise highlight frames.** Red frames are aligned to the exact region of the figure they point at, verified from page renders.
+- **➡️ Arrows to callouts.** Every callout is connected by an arrow to the thing it explains; boxes fit their text and the text is large.
+- **📖 Terms spelled out.** Every term gets its full name and a plain explanation on first use.
+- **⏱️ Time by key points.** The time budget comes from the number of key points and the length of each slide's full script, not from page count.
+- **🎬 Videos & QR codes.** Helpers embed demo videos that autoplay and loop, QR codes (e.g., Slido), real bullets, diverging bar charts and centred callouts.
+- **🌍 Any language.** Skills are written in English; slides and speaker notes come out in whatever language you ask for.
+
+</details>
+
+---
+
+## 🧩 Skills
+
+| Skill | What it does | Version |
+| --- | --- | :---: |
+| [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | Sets up a project folder for one paper or topic and collects its media (PDF, figures, demo videos, chart data, screenshots) with source attribution: downloads automatically where possible (direct, released files, browser), asks only for what truly cannot be fetched, and keeps a typed manifest of every asset plus a missing list. | v0.2.1 |
+| [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva) that put audience understanding first. Ships a reference template deck, a `chrome()` helper for template header / footer, and a render checker for page renders, thumbnail sheets and footer zoom strips. | v0.2.0 |
 
 More paper-sharing skills will be added over time.
 
-## Install
+### How they fit together
+
+```mermaid
+flowchart LR
+    A["📄 Paper link<br/>or title"] --> B["paper-project-setup<br/>folder + assets + manifest"]
+    B --> C["paper-discussion-slides"]
+    C --> D1["Define the problem"]
+    D1 --> D2["Plan key points<br/>+ time budget"]
+    D2 --> D3["One concept per slide<br/>+ full script"]
+    D3 --> D4["Progressive builds<br/>where needed"]
+    D4 --> D5["Check frames, terms,<br/>callouts, timing"]
+    D5 --> E["🎤 Deck + speaker notes"]
+```
+
+If the paper has no project folder yet, Claude runs `paper-project-setup` first, then follows the slide workflow.
+
+---
+
+## 📸 Sample template
+
+The slide skill ships a reference deck ([`sample-template.pptx`](skills/paper-discussion-slides/assets/sample-template.pptx)) showing the layout rules in practice: cover page, figure with an arrowed question callout, a precisely aligned red frame with its explanation, and a side-by-side discussion slide with a Slido QR placeholder.
+
+[![Four sample slides: cover, figure with arrowed callout, aligned highlight frame, two-block discussion](skills/paper-discussion-slides/assets/sample-template-preview.png)](skills/paper-discussion-slides/assets/sample-template-preview.png)
+
+Bring your own template instead — Claude reads its header / footer layout and draws it with `chrome()`.
+
+---
+
+## 🚀 Install
 
 ### Claude Code
 
@@ -26,39 +98,69 @@ More paper-sharing skills will be added over time.
 
 Download `paper-sharing-skills.plugin` from [Releases](../../releases) and install it in Claude, or upload any folder under `skills/` as an individual skill.
 
-## Usage
+> [!NOTE]
+> The helper scripts use only the Python standard library plus `python-pptx` for decks. `ffmpeg` is used for video shrinking and poster frames, and Pillow (optional) for image checks.
 
-Just describe what you need, for example:
+---
 
-- "Make a 30-minute discussion deck for this paper; the audience is students interested in robotics."
-- "Build journal club slides for this paper using my template (attached)."
-- "Set up a folder for this paper and collect the figures and demo videos from its project page."
+## 💬 Usage
 
-If the paper has no project folder yet, Claude first runs `paper-project-setup` to create one and collect the figures, videos and chart data, then follows the slide workflow: define the problem → plan key points and time → build each concept as one slide with a full script → decide which points need a progressive build → check frames, terms, callouts and timing.
+Just describe what you need:
 
-Slides and speaker notes are written in whatever language you ask for.
+- *"Make a 30-minute discussion deck for this paper; the audience is students interested in robotics."*
+- *"Build journal club slides for this paper using my template (attached)."*
+- *"Set up a folder for this paper and collect the figures and demo videos from its project page."*
+- *"幫我做這篇論文的讀書會簡報，用繁體中文，20 分鐘。"*
 
-## Repository layout
+<details>
+<summary><b>Helper scripts Claude uses under the hood →</b></summary>
 
-```
-.claude-plugin/
-  plugin.json             # plugin metadata
-  marketplace.json        # lets Claude Code install this repo as a marketplace
-skills/
-  paper-project-setup/
-    SKILL.md              # folder layout, collection routes, manifest
-    references/           # browser extraction snippets
-    scripts/asset_tools.py# init / add / shrink / posters / check
-  paper-discussion-slides/
-    SKILL.md              # core rules (Claude reads this first)
-    references/           # detailed examples, template spec example, PPTX techniques
-    assets/               # sample-template.pptx (reference deck) + preview
-    scripts/slide_kit.py  # python-pptx helpers, incl. chrome() for header / title / footer
-    scripts/build_sample_template.py  # rebuilds assets/sample-template.pptx
-    scripts/render_check.py           # page renders, thumbnail sheet, footer zoom strip
+<br>
+
+**`asset_tools.py`** — project folder maintenance (standard library only):
+
+```text
+init    <dir> --title T [--url U ...]       create folder layout, README.md and manifest.json
+add     <dir> <file> --type T --label L --source URL --obtained HOW
+missing <dir> "what" --source URL --reason R
+shrink  <video> [--width 1280] [--crf 28]   write <name>_small.mp4 (needs ffmpeg)
+posters <video> --at 0.1 0.5 0.9            extract still frames (needs ffmpeg)
+check   <dir>                               verify every manifest file exists and opens
 ```
 
-## Adding a skill
+**`slide_kit.py`** — python-pptx helpers: `chrome()` (template header / title / footer), `callout()`, `frame()`, `arc_arrow()`, `block_arrow()`, `bullets()`, `hbars()`, `video()`, `qr()`, `notes()`, `dim()` / `hide()` for progressive builds.
+
+**`render_check.py`** — page renders, a thumbnail sheet and a footer zoom strip, so frames and alignment are checked visually rather than assumed.
+
+</details>
+
+---
+
+## 📂 Repository layout
+
+```
+.
+├── .claude-plugin/
+│   ├── plugin.json                  # plugin metadata
+│   └── marketplace.json             # lets Claude Code install this repo as a marketplace
+└── skills/
+    ├── paper-project-setup/
+    │   ├── SKILL.md                 # folder layout, collection routes, manifest
+    │   ├── references/              # browser extraction snippets
+    │   └── scripts/asset_tools.py   # init / add / shrink / posters / check
+    └── paper-discussion-slides/
+        ├── SKILL.md                 # core rules (Claude reads this first)
+        ├── references/              # detailed examples, template spec example, PPTX techniques
+        ├── assets/                  # sample-template.pptx (reference deck) + preview
+        └── scripts/
+            ├── slide_kit.py              # python-pptx helpers, incl. chrome()
+            ├── build_sample_template.py  # rebuilds assets/sample-template.pptx
+            └── render_check.py           # page renders, thumbnail sheet, footer zoom strip
+```
+
+---
+
+## 🛠️ Adding a skill
 
 1. Create a folder under `skills/` with a kebab-case name (e.g., `paper-reading-notes`).
 2. Add a `SKILL.md` that starts with YAML frontmatter:
@@ -71,12 +173,27 @@ skills/
 3. Write the body as instructions for Claude. Put long examples and specifications in `references/` and code in `scripts/`.
 4. Add the skill to the table above and bump the version in `.claude-plugin/plugin.json` and `marketplace.json`.
 
-Keep the same principle for new skills: every rule should answer "does this make it easier for the audience or reader to understand?"
+> [!TIP]
+> Keep the same principle for new skills: every rule should answer *"does this make it easier for the audience or reader to understand?"*
 
-## 中文說明
+---
 
-論文分享的 Claude skill 集合。`paper-project-setup` 為每篇論文建立專案資料夾並收集圖片、影片、圖表數據（能自動下載就自動，真的抓不到才請使用者幫忙），並記錄每個素材的來源；`paper-discussion-slides` 用來製作以觀眾理解為核心的論文討論簡報：先定義問題、只在需要分步引導時才拆成多頁、紅框精準對齊、用箭頭把重點連到說明框、專有名詞第一次出現就寫全稱並解釋、用要點與講稿估時間。製作簡報前若主題還沒設定，會先執行 `paper-project-setup`。Skill 內容以英文撰寫，簡報可以指定任何語言（例如繁體中文）。
+## 📚 Citation
 
-## License
+If these skills help your talks or research, please cite them:
 
-[MIT](LICENSE)
+```bibtex
+@software{paper_sharing_skills,
+  author  = {Ren-Di, Wu},
+  title   = {{paper-sharing-skills: Audience-First Claude Skills for Sharing Research Papers}},
+  year    = {2026},
+  url     = {https://github.com/whats2000/paper-sharing-skills},
+  version = {0.3.0}
+}
+```
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) — © whats2000.
