@@ -54,13 +54,8 @@
 | --- | --- | :---: |
 | [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | 為一篇論文或一個主題建立專案資料夾，收集 PDF、圖片、展示影片、圖表數據、截圖並記錄來源：能自動下載就自動（直接下載、釋出檔案、瀏覽器），真的抓不到才請使用者幫忙，並維護每個素材的 manifest 與缺漏清單。 | v0.2.1 |
 | [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | 製作以觀眾理解為核心的論文討論／讀書會簡報（PPTX 或 Canva）。附參考模板簡報、繪製模板頁首頁尾的 `chrome()`，以及產生頁面渲染、縮圖總覽與頁尾放大條的檢查工具。 | v0.2.0 |
-| [`paper-bilingual-figure-audit`](skills/paper-bilingual-figure-audit/SKILL.md) | 將英語論文完整翻譯成繁體中文、逐段保留原始英文，並產出可離線開啟、整合主圖及 Supporting Information 的互動 HTML 查核閱讀器。 | v0.1.0 |
 
 之後會陸續加入更多論文分享相關的 skill。
-
-### 新增：中英逐段對照論文查核閱讀器
-
-[`paper-bilingual-figure-audit`](skills/paper-bilingual-figure-audit/README.zh-TW.md) 提供**中文在上、英文原文在下**的完整逐段翻譯及離線 HTML 閱讀器，整合主圖、SI 圖表、交叉引用與查核筆記，使用 `Introduction · P2`、`Fig. 3 · P2`、`Fig. 1 caption` 等精簡定位方式。詳見 [English README](skills/paper-bilingual-figure-audit/README.md) 或 [繁體中文說明](skills/paper-bilingual-figure-audit/README.zh-TW.md)。Python 只負責擷取／組裝 HTML，翻譯仍需模型或譯者完成。
 
 ### 兩者如何搭配
 
