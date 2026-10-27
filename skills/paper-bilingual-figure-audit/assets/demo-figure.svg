@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+<rect width="900" height="420" fill="#f7fbfd"/>
+<rect x="60" y="110" width="280" height="180" rx="18" fill="#d9edf8" stroke="#437b9a" stroke-width="3"/>
+<rect x="560" y="110" width="280" height="180" rx="18" fill="#e6f3df" stroke="#5d956c" stroke-width="3"/>
+<path d="M355 200 L535 200" stroke="#5386a0" stroke-width="7" fill="none"/>
+<path d="M520 185 L540 200 L520 215" fill="none" stroke="#5386a0" stroke-width="7"/>
+<g font-family="Arial,sans-serif" text-anchor="middle" fill="#263c52">
+<text x="200" y="190" font-size="36">English</text><text x="200" y="230" font-size="21">Source paragraph</text>
+<text x="700" y="190" font-size="36">中文</text><text x="700" y="230" font-size="21">完整譯文</text>
+<text x="450" y="45" font-size="25">DEMO FIGURE ONLY · NOT EXPERIMENTAL DATA</text>
+</g></svg>

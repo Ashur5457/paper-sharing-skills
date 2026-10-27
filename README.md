@@ -7,10 +7,10 @@
 Project folder + asset collection with source attribution · audience-first paper-discussion decks (PPTX or Canva) · progressive builds only where reasoning needs them · precise highlight frames · arrows from every callout · time budgeted by key points, not page count.
 
 ![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/skills-2-8A63D2)
+![Skills](https://img.shields.io/badge/skills-3-8A63D2)
 ![Python](https://img.shields.io/badge/python-3-3776AB?logo=python&logoColor=white)
 ![python-pptx](https://img.shields.io/badge/python--pptx-helpers-B7472A?logo=microsoftpowerpoint&logoColor=white)
-![Version](https://img.shields.io/badge/release-v0.3.0-success)
+![Version](https://img.shields.io/badge/release-v0.4.0-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 **English** · [繁體中文](README.zh-TW.md)
@@ -54,8 +54,13 @@ Works in **Claude Code**, **claude.ai** and the **Claude desktop app**.
 | --- | --- | :---: |
 | [`paper-project-setup`](skills/paper-project-setup/SKILL.md) | Sets up a project folder for one paper or topic and collects its media (PDF, figures, demo videos, chart data, screenshots) with source attribution: downloads automatically where possible (direct, released files, browser), asks only for what truly cannot be fetched, and keeps a typed manifest of every asset plus a missing list. | v0.2.1 |
 | [`paper-discussion-slides`](skills/paper-discussion-slides/SKILL.md) | Designs paper-discussion / journal-club decks (PPTX or Canva) that put audience understanding first. Ships a reference template deck, a `chrome()` helper for template header / footer, and a render checker for page renders, thumbnail sheets and footer zoom strips. | v0.2.0 |
+| [`paper-bilingual-figure-audit`](skills/paper-bilingual-figure-audit/SKILL.md) | Produces a full English–Traditional Chinese offline HTML manuscript reader, with original text under each translated paragraph, main/SI figure links, tables, and audit notes. | v0.1.0 |
 
 More paper-sharing skills will be added over time.
+
+### Bilingual manuscript audit reader
+
+The new **[`paper-bilingual-figure-audit`](skills/paper-bilingual-figure-audit/README.md)** skill is a complementary workflow for **reading, translating, and verifying** a manuscript before discussion or review. It keeps **Traditional Chinese directly above the original English**, embeds the main figures and Supporting Information, and uses compact paragraph locators such as `Fig. 3 · P2` and `Fig. 1 caption`. See the [English guide](skills/paper-bilingual-figure-audit/README.md) or [繁體中文說明](skills/paper-bilingual-figure-audit/README.zh-TW.md). It does **not** automatically translate a paper by running Python: the translator must supply and verify every translated paragraph.
 
 ### How they fit together
 
@@ -148,7 +153,7 @@ check   <dir>                               verify every manifest file exists an
     │   ├── SKILL.md                 # folder layout, collection routes, manifest
     │   ├── references/              # browser extraction snippets
     │   └── scripts/asset_tools.py   # init / add / shrink / posters / check
-    └── paper-discussion-slides/
+    ├── paper-discussion-slides/
         ├── SKILL.md                 # core rules (Claude reads this first)
         ├── references/              # detailed examples, template spec example, PPTX techniques
         ├── assets/                  # sample-template.pptx (reference deck) + preview
@@ -188,7 +193,7 @@ If these skills help your talks or research, please cite them:
   title   = {{paper-sharing-skills: Audience-First Claude Skills for Sharing Research Papers}},
   year    = {2026},
   url     = {https://github.com/whats2000/paper-sharing-skills},
-  version = {0.3.0}
+  version = {0.4.0}
 }
 ```
 
