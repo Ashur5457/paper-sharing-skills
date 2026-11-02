@@ -2,7 +2,7 @@
 
 It shows the template chrome (header bands, title, footer halves with vertically centred
 text) and the standard building blocks: a callout connected by a curved arrow, a red frame
-with a block arrow to its callout, a dimmed element, and two build steps that share one page
+with a block arrow to its callout, a dimming mask over already-discussed content, and two build steps that share one page
 number. Open it to see how a finished slide should look, or copy its geometry.
 
     python build_sample_template.py [out.pptx]
@@ -12,7 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from slide_kit import (new_deck, blank_slide, chrome, text, rect, callout, arc_arrow, frame,
-                       block_arrow, dim, bullets, qr, notes, MUTED, BLUE, GRAYBG)
+                       block_arrow, dim_area, bullets, block, qr, notes, MUTED, BLUE, GRAYBG)
 
 DECK = 'Short Deck Title'
 CREDIT = 'Source Authors / Institution, 2026'   # the work being discussed, not the presenter
@@ -49,30 +49,26 @@ def content(prs, step):
         arc_arrow(s, (1072, 600), (b[0] - 10, b[1] + b[3] / 2), bend=-0.35)
         notes(s, 'Build step 1 of 2 (same page number as step 2). Curved arrow: this leads to a question.')
     else:
-        dim(fig, 35000)
+        dim_area(s, 72, 240, 1000, 560)   # mask over what step 1 discussed
         f = (300, 420, 360, 220)
         rect(s, f[0], f[1], f[2], f[3], fill='C9D7EA', radius=12)
         frame(s, *f)
         _, b = callout(s, 1180, 470, ['This part means …'])
         block_arrow(s, f[0] + f[2] + 12, f[1] + f[3] / 2 - 30, b[0] - (f[0] + f[2]) - 24, 60, 'right')
-        notes(s, 'Build step 2 of 2: the previous callout and arrow are gone; the rest of the figure is dimmed only '
-                 'to show dimming; normally a frame circles part of an image and nothing is dimmed. Block arrow: '
-                 'this, therefore.')
+        notes(s, 'Build step 2 of 2: the previous callout and arrow are gone; the figure is dimmed with dim_area() only '
+                 'to show the mask (white, 80% opacity, no outline, no shadow); normally a frame circles part of an '
+                 'image and nothing is dimmed. Block arrow: this, therefore.')
     return s
 
 
 def blocks(prs):
     s = blank_slide(prs)
-    chrome(s, 'Two blocks side by side (discussion)', DECK, CREDIT, page=3, total=TOTAL)
-    for i, (head, body) in enumerate([('Why it works', ['point with a number', 'second point']),
-                                      ('Limits the authors admit', ['quote their wording', '"in some cases"'])]):
-        x = 72 + i * 900
-        rect(s, x, 260, 840, 70, fill=BLUE, radius=12)
-        text(s, x + 28, 260, 800, 70, head, size=32, color='FFFFFF', bold=True, anchor='m')
-        rect(s, x, 330, 840, 380, fill=GRAYBG, radius=12)
-        bullets(s, x + 28, 360, 790, 330, body, size=30)
+    chrome(s, 'Block element (layout is chosen per slide)', DECK, CREDIT, page=3, total=TOTAL)
+    for i, (head, body) in enumerate([('Block A', ['keyword or number', 'second keyword']),
+                                      ('Block B', ['keyword or number', 'second keyword'])]):
+        block(s, 72 + i * 900, 260, 840, 450, head, body, size=30)
     qr(s, '', 1620, 740, 200, label='Slido QR (placeholder)')
-    notes(s, 'Blocks: accent title bar, light grey body with real bullets (bullets()), keywords and numbers only. '
+    notes(s, 'block() in the template colours; headings and columns are placeholders. '
              'The QR placeholder shows what qr() draws when no event link is known yet.')
     return s
 

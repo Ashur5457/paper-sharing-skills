@@ -77,9 +77,9 @@ If the paper has no project folder yet, Claude runs `paper-project-setup` first,
 
 ## 📸 Sample template
 
-The slide skill ships a reference deck ([`sample-template.pptx`](skills/paper-discussion-slides/assets/sample-template.pptx)) showing the layout rules in practice: cover page, figure with an arrowed question callout, a precisely aligned red frame with its explanation, and a side-by-side discussion slide with a Slido QR placeholder.
+The slide skill ships a reference deck ([`sample-template.pptx`](skills/paper-discussion-slides/assets/sample-template.pptx)) showing the layout rules in practice: cover page, figure with an arrowed question callout, a precisely aligned red frame with its explanation, and a block element with a Slido QR placeholder.
 
-[![Four sample slides: cover, figure with arrowed callout, aligned highlight frame, two-block discussion](skills/paper-discussion-slides/assets/sample-template-preview.png)](skills/paper-discussion-slides/assets/sample-template-preview.png)
+[![Four sample slides: cover, figure with arrowed callout, aligned highlight frame, block element](skills/paper-discussion-slides/assets/sample-template-preview.png)](skills/paper-discussion-slides/assets/sample-template-preview.png)
 
 Bring your own template instead — Claude reads its header / footer layout and draws it with `chrome()`.
 
@@ -128,7 +128,7 @@ posters <video> --at 0.1 0.5 0.9            extract still frames (needs ffmpeg)
 check   <dir>                               verify every manifest file exists and opens
 ```
 
-**`slide_kit.py`** — python-pptx helpers: `chrome()` (template header / title / footer), `callout()`, `frame()`, `arc_arrow()`, `block_arrow()`, `bullets()`, `hbars()`, `video()`, `qr()`, `notes()`, `dim()` / `hide()` for progressive builds.
+**`slide_kit.py`** — python-pptx helpers: `chrome()` (template header / title / footer), `callout()`, `frame()`, `arc_arrow()`, `block_arrow()`, `bullets()`, `hbars()`, `video()`, `qr()`, `notes()`, `dim_area()` (dimming mask, default) / `dim()` / `hide()` for progressive builds.
 
 **`render_check.py`** — page renders, a thumbnail sheet and a footer zoom strip, so frames and alignment are checked visually rather than assumed.
 
